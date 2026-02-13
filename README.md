@@ -4,6 +4,15 @@
 
 # pycohortflow
 
+[![CI](https://github.com/fschwar4/pycohortflow/actions/workflows/ci.yml/badge.svg)](https://github.com/fschwar4/pycohortflow/actions/workflows/ci.yml)
+[![Documentation](https://github.com/fschwar4/pycohortflow/actions/workflows/docs.yml/badge.svg)](https://github.com/fschwar4/pycohortflow/actions/workflows/docs.yml)
+[![PyPI version](https://img.shields.io/pypi/v/pycohortflow.svg)](https://pypi.org/project/pycohortflow/)
+[![Python versions](https://img.shields.io/pypi/pyversions/pycohortflow.svg)](https://pypi.org/project/pycohortflow/)
+[![License](https://img.shields.io/pypi/l/pycohortflow.svg)](https://pypi.org/project/pycohortflow/)
+
+
+
+
 Lightweight cohort flow diagrams built on Matplotlib.
 
 Turn a plain Python list of cohort steps into a publication-ready vertical flow chart with a single function call. Colours, fonts, spacing, and box geometry are fully customisable via TOML configuration files.

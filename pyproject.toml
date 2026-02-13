@@ -14,6 +14,7 @@ authors = [
 ]
 keywords = ["cohort", "flow diagram", "matplotlib", "clinical", "consort"]
 classifiers = [
+    "License :: OSI Approved :: AGPL-3.0-only License
     "Development Status :: 4 - Beta",
     "Intended Audience :: Science/Research",
     "Intended Audience :: Healthcare Industry",
