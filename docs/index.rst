@@ -1,5 +1,11 @@
+.. image:: _static/logo_wide.svg
+  :alt: pycohortflow logo
+  :align: right
+  :width: 35%
+
 pycohortflow
 =============
+
 
 **Lightweight cohort flow diagrams built on Matplotlib.**
 
