@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="docs/_static/logo_wide.svg" alt="pycohortflow logo" width="100%" />
+</p>
+
 # pycohortflow
 
 Lightweight cohort flow diagrams built on Matplotlib.
@@ -37,6 +41,11 @@ plt.show()
 ## Built-in Styles
 
 Two styles ship with the package:
+
+<p align="center">
+  <img src="docs/_static/clinical_flow_chart_white.png" alt="White style preview" width="45%" />
+  <img src="docs/_static/clinical_flow_chart_colorful.png" alt="Colorful style preview" width="45%" />
+</p>
 
 ```python
 # Clean white boxes (default)
