@@ -1,63 +1,437 @@
-<svg width="900" height="180" viewBox="0 0 900 180" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="logo-title logo-desc">
-  <title id="logo-title">pycohortflow logo</title>
-  <desc id="logo-desc">Cohort flow icon with pycohortflow lettering.</desc>
-
-  <defs>
-    <linearGradient id="bg" x1="8" y1="8" x2="132" y2="132" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#DFF1FF"/>
-      <stop offset="1" stop-color="#DFF7E8"/>
-    </linearGradient>
-    <linearGradient id="mainFill" x1="24" y1="20" x2="80" y2="118" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#EAF6FF"/>
-      <stop offset="1" stop-color="#E8F8EB"/>
-    </linearGradient>
-    <linearGradient id="exclFill" x1="86" y1="48" x2="118" y2="80" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#FEE8E8"/>
-      <stop offset="1" stop-color="#F8CCCC"/>
-    </linearGradient>
-    <marker id="arrowDown" viewBox="0 0 6 6" refX="3" refY="5.5" markerWidth="5" markerHeight="5" markerUnits="userSpaceOnUse" orient="auto">
-      <path d="M0.5 0L3 5L5.5 0" fill="none" stroke="#0F172A" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="900"
+   height="180"
+   viewBox="0 0 900 180"
+   fill="none"
+   role="img"
+   aria-labelledby="logo-title logo-desc"
+   version="1.1"
+   id="svg84"
+   sodipodi:docname="logo_wide.svg"
+   inkscape:version="1.2.2 (b0a84865, 2022-12-01)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview86"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="false"
+     showguides="true"
+     inkscape:zoom="7.4167645"
+     inkscape:cx="67.212597"
+     inkscape:cy="90.066228"
+     inkscape:window-width="1500"
+     inkscape:window-height="924"
+     inkscape:window-x="0"
+     inkscape:window-y="30"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="g78">
+    <sodipodi:guide
+       position="64.313759,123.91085"
+       orientation="1,0"
+       id="guide2203"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="42.201691,109.48408"
+       orientation="0,-1"
+       id="guide3640"
+       inkscape:locked="false" />
+  </sodipodi:namedview>
+  <title
+     id="logo-title">pycohortflow logo</title>
+  <desc
+     id="logo-desc">Cohort flow icon with pycohortflow lettering.</desc>
+  <defs
+     id="defs32">
+    <marker
+       style="overflow:visible"
+       id="TriangleStart"
+       refX="2"
+       refY="0"
+       orient="auto-start-reverse"
+       inkscape:stockid="TriangleStart"
+       markerWidth="5.1900001"
+       markerHeight="6"
+       viewBox="0 0 5.3244081 6.1553851"
+       inkscape:isstock="true"
+       inkscape:collect="always"
+       preserveAspectRatio="xMidYMid">
+      <path
+         transform="scale(0.5)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path135" />
     </marker>
-    <marker id="arrowRight" viewBox="0 0 6 6" refX="5.5" refY="3" markerWidth="5" markerHeight="5" markerUnits="userSpaceOnUse" orient="auto">
-      <path d="M0 0.5L5 3L0 5.5" fill="none" stroke="#0F172A" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+    <linearGradient
+       id="bg"
+       x1="8"
+       y1="8"
+       x2="132"
+       y2="132"
+       gradientUnits="userSpaceOnUse">
+      <stop
+         stop-color="#DFF1FF"
+         id="stop11" />
+      <stop
+         offset="1"
+         stop-color="#DFF7E8"
+         id="stop13" />
+    </linearGradient>
+    <linearGradient
+       id="mainFill"
+       x1="24"
+       y1="20"
+       x2="80"
+       y2="118"
+       gradientUnits="userSpaceOnUse">
+      <stop
+         stop-color="#EAF6FF"
+         id="stop16" />
+      <stop
+         offset="1"
+         stop-color="#E8F8EB"
+         id="stop18" />
+    </linearGradient>
+    <linearGradient
+       id="exclFill"
+       x1="86"
+       y1="48"
+       x2="118"
+       y2="80"
+       gradientUnits="userSpaceOnUse">
+      <stop
+         stop-color="#FEE8E8"
+         id="stop21" />
+      <stop
+         offset="1"
+         stop-color="#F8CCCC"
+         id="stop23" />
+    </linearGradient>
+    <!-- Marker tips are the reference points, so arrowheads land exactly on box borders -->
+    <marker
+       id="arrowDown"
+       viewBox="0 0 6 6"
+       refX="3"
+       refY="6"
+       markerWidth="6"
+       markerHeight="6"
+       markerUnits="userSpaceOnUse"
+       orient="auto">
+      <path
+         d="M 0.8,0.8 3,6 5.2,0.8 Z"
+         fill="#0f172a"
+         id="path26" />
+    </marker>
+    <marker
+       id="arrowRight"
+       viewBox="0 0 6 6"
+       refX="6"
+       refY="3"
+       markerWidth="6"
+       markerHeight="6"
+       markerUnits="userSpaceOnUse"
+       orient="auto">
+      <path
+         d="M 0.8,0.8 6,3 0.8,5.2 Z"
+         fill="#0f172a"
+         id="path29" />
+    </marker>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#exclFill"
+       id="linearGradient1241"
+       gradientUnits="userSpaceOnUse"
+       x1="86"
+       y1="48"
+       x2="118"
+       y2="80"
+       gradientTransform="translate(-5.528017,-16.314392)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#exclFill"
+       id="linearGradient1329"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(-5.528017,-16.314392)"
+       x1="86"
+       y1="48"
+       x2="118"
+       y2="80" />
+    <marker
+       style="overflow:visible"
+       id="TriangleStart-2"
+       refX="2"
+       refY="0"
+       orient="auto-start-reverse"
+       inkscape:stockid="TriangleStart"
+       markerWidth="5.1900001"
+       markerHeight="6"
+       viewBox="0 0 5.3244081 6.1553851"
+       inkscape:isstock="true"
+       inkscape:collect="always"
+       preserveAspectRatio="xMidYMid">
+      <path
+         transform="scale(0.5)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path135-1" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="TriangleStart-2-5"
+       refX="2"
+       refY="0"
+       orient="auto-start-reverse"
+       inkscape:stockid="TriangleStart"
+       markerWidth="5.1900001"
+       markerHeight="6"
+       viewBox="0 0 5.3244081 6.1553851"
+       inkscape:isstock="true"
+       inkscape:collect="always"
+       preserveAspectRatio="xMidYMid">
+      <path
+         transform="scale(0.5)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path135-1-1" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="TriangleStart-2-5-7"
+       refX="2"
+       refY="0"
+       orient="auto-start-reverse"
+       inkscape:stockid="TriangleStart"
+       markerWidth="5.1900001"
+       markerHeight="6"
+       viewBox="0 0 5.3244081 6.1553851"
+       inkscape:isstock="true"
+       inkscape:collect="always"
+       preserveAspectRatio="xMidYMid">
+      <path
+         transform="scale(0.5)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path135-1-1-3" />
     </marker>
   </defs>
-
-  <g transform="translate(14,20)">
-    <rect x="6" y="6" width="128" height="128" rx="28" fill="url(#bg)"/>
-
-    <rect x="22" y="20" width="54" height="20" rx="5" fill="url(#mainFill)" stroke="#0F172A" stroke-width="1.3"/>
-    <rect x="22" y="60" width="54" height="20" rx="5" fill="url(#mainFill)" stroke="#0F172A" stroke-width="1.3"/>
-    <rect x="22" y="100" width="54" height="20" rx="5" fill="url(#mainFill)" stroke="#0F172A" stroke-width="1.3"/>
-
-    <line x1="49" y1="40" x2="49" y2="59" stroke="#0F172A" stroke-width="1.1" stroke-linecap="round" marker-end="url(#arrowDown)"/>
-    <line x1="49" y1="80" x2="49" y2="99" stroke="#0F172A" stroke-width="1.1" stroke-linecap="round" marker-end="url(#arrowDown)"/>
-
-    <rect x="90" y="57" width="30" height="16" rx="4" fill="url(#exclFill)" stroke="#0F172A" stroke-width="1.1"/>
-    <rect x="90" y="99" width="30" height="16" rx="4" fill="url(#exclFill)" stroke="#0F172A" stroke-width="1.1"/>
-
-    <circle cx="49" cy="65" r="2" fill="#0F172A"/>
-    <line x1="51.5" y1="65" x2="89" y2="65" stroke="#0F172A" stroke-width="1.1" stroke-linecap="round" marker-end="url(#arrowRight)"/>
-
-    <circle cx="49" cy="107" r="2" fill="#0F172A"/>
-    <line x1="51.5" y1="107" x2="89" y2="107" stroke="#0F172A" stroke-width="1.1" stroke-linecap="round" marker-end="url(#arrowRight)"/>
-
-    <line x1="30" y1="28" x2="55" y2="28" stroke="#0F172A" stroke-width="1" stroke-linecap="round" opacity="0.12"/>
-    <line x1="30" y1="33" x2="48" y2="33" stroke="#0F172A" stroke-width="1" stroke-linecap="round" opacity="0.08"/>
-
-    <line x1="30" y1="68" x2="40" y2="68" stroke="#0F172A" stroke-width="1" stroke-linecap="round" opacity="0.12"/>
-    <line x1="30" y1="73" x2="48" y2="73" stroke="#0F172A" stroke-width="1" stroke-linecap="round" opacity="0.08"/>
-
-    <line x1="30" y1="108" x2="40" y2="108" stroke="#0F172A" stroke-width="1" stroke-linecap="round" opacity="0.12"/>
-    <line x1="30" y1="113" x2="48" y2="113" stroke="#0F172A" stroke-width="1" stroke-linecap="round" opacity="0.08"/>
-
-    <line x1="95" y1="63.5" x2="112" y2="63.5" stroke="#0F172A" stroke-width="0.8" stroke-linecap="round" opacity="0.10"/>
-    <line x1="95" y1="68" x2="107" y2="68" stroke="#0F172A" stroke-width="0.8" stroke-linecap="round" opacity="0.07"/>
-
-    <line x1="95" y1="105.5" x2="112" y2="105.5" stroke="#0F172A" stroke-width="0.8" stroke-linecap="round" opacity="0.10"/>
-    <line x1="95" y1="110" x2="107" y2="110" stroke="#0F172A" stroke-width="0.8" stroke-linecap="round" opacity="0.07"/>
+  <g
+     transform="translate(14,20)"
+     id="g78">
+    <rect
+       x="6"
+       y="6"
+       width="128"
+       height="128"
+       rx="28"
+       fill="url(#bg)"
+       id="rect34" />
+    <rect
+       x="22"
+       y="20"
+       width="54"
+       height="20"
+       rx="5"
+       fill="url(#mainFill)"
+       stroke="#0F172A"
+       stroke-width="1.3"
+       id="rect36" />
+    <rect
+       x="22"
+       y="60"
+       width="54"
+       height="20"
+       rx="5"
+       fill="url(#mainFill)"
+       stroke="#0F172A"
+       stroke-width="1.3"
+       id="rect38" />
+    <rect
+       x="22"
+       y="100"
+       width="54"
+       height="20"
+       rx="5"
+       fill="url(#mainFill)"
+       stroke="#0F172A"
+       stroke-width="1.3"
+       id="rect40" />
+    <!-- Vertical arrows end exactly on top borders of downstream boxes -->
+    <!-- Horizontal arrows end exactly on left borders of exclusion boxes -->
+    <line
+       x1="30"
+       y1="28"
+       x2="55"
+       y2="28"
+       stroke="#0F172A"
+       stroke-width="1"
+       stroke-linecap="round"
+       opacity="0.12"
+       id="line58" />
+    <line
+       x1="30"
+       y1="33"
+       x2="48"
+       y2="33"
+       stroke="#0F172A"
+       stroke-width="1"
+       stroke-linecap="round"
+       opacity="0.08"
+       id="line60" />
+    <line
+       x1="30"
+       y1="68"
+       x2="40"
+       y2="68"
+       stroke="#0F172A"
+       stroke-width="1"
+       stroke-linecap="round"
+       opacity="0.12"
+       id="line62" />
+    <line
+       x1="30"
+       y1="73"
+       x2="48"
+       y2="73"
+       stroke="#0F172A"
+       stroke-width="1"
+       stroke-linecap="round"
+       opacity="0.08"
+       id="line64" />
+    <line
+       x1="30"
+       y1="108"
+       x2="40"
+       y2="108"
+       stroke="#0F172A"
+       stroke-width="1"
+       stroke-linecap="round"
+       opacity="0.12"
+       id="line66" />
+    <line
+       x1="30"
+       y1="113"
+       x2="48"
+       y2="113"
+       stroke="#0F172A"
+       stroke-width="1"
+       stroke-linecap="round"
+       opacity="0.08"
+       id="line68" />
+    <g
+       id="g1270"
+       transform="translate(-1.0786375,1.0786375)">
+      <rect
+         x="84.471985"
+         y="82.685608"
+         width="30"
+         height="16"
+         rx="4"
+         fill="url(#exclFill)"
+         stroke="#0f172a"
+         stroke-width="1.1"
+         id="rect48"
+         style="fill:url(#linearGradient1241)" />
+      <line
+         x1="89.471985"
+         y1="89.185608"
+         x2="106.47198"
+         y2="89.185608"
+         stroke="#0f172a"
+         stroke-width="0.8"
+         stroke-linecap="round"
+         opacity="0.1"
+         id="line74" />
+      <line
+         x1="89.471985"
+         y1="93.685608"
+         x2="101.47198"
+         y2="93.685608"
+         stroke="#0f172a"
+         stroke-width="0.8"
+         stroke-linecap="round"
+         opacity="0.07"
+         id="line76" />
+    </g>
+    <g
+       id="g1270-5"
+       transform="translate(-1.2936886,-38.686557)">
+      <rect
+         x="84.471985"
+         y="82.685608"
+         width="30"
+         height="16"
+         rx="4"
+         fill="url(#exclFill)"
+         stroke="#0f172a"
+         stroke-width="1.1"
+         id="rect48-6"
+         style="fill:url(#linearGradient1329)" />
+      <line
+         x1="89.471985"
+         y1="89.185608"
+         x2="106.47198"
+         y2="89.185608"
+         stroke="#0f172a"
+         stroke-width="0.8"
+         stroke-linecap="round"
+         opacity="0.1"
+         id="line74-3" />
+      <line
+         x1="89.471985"
+         y1="93.685608"
+         x2="101.47198"
+         y2="93.685608"
+         stroke="#0f172a"
+         stroke-width="0.8"
+         stroke-linecap="round"
+         opacity="0.07"
+         id="line76-6" />
+    </g>
+    <path
+       style="fill:#000000;stroke:#000000;stroke-width:0.973953;stroke-opacity:1;marker-end:url(#TriangleStart)"
+       d="M 50.856954,91.240512 81.43316,91.23373"
+       id="path302-8"
+       sodipodi:nodetypes="cc" />
+    <path
+       style="fill:#000000;stroke:#000000;stroke-width:0.973953;stroke-opacity:1;marker-end:url(#TriangleStart-2)"
+       d="M 51.077924,51.029495 81.38447,50.887884"
+       id="path302-8-9"
+       sodipodi:nodetypes="cc" />
+    <path
+       style="fill:#000000;stroke:#000000;stroke-width:0.811045;stroke-opacity:1;marker-end:url(#TriangleStart-2-5)"
+       d="m 50.863564,40.35123 0.04387,17.888989"
+       id="path302-8-9-3"
+       sodipodi:nodetypes="cc" />
+    <path
+       style="fill:#000000;stroke:#000000;stroke-width:0.811045;stroke-opacity:1;marker-end:url(#TriangleStart-2-5-7)"
+       d="m 50.816523,80.329079 0.04387,17.888989"
+       id="path302-8-9-3-7"
+       sodipodi:nodetypes="cc" />
   </g>
-
-  <text x="190" y="88" fill="#0F172A" font-family="Avenir Next, Segoe UI, Helvetica, Arial, sans-serif" font-size="62" font-weight="600" letter-spacing="0.2">pycohortflow</text>
-  <text x="192" y="124" fill="#334155" font-family="Avenir Next, Segoe UI, Helvetica, Arial, sans-serif" font-size="24" font-weight="500">lightweight library for cohort flow charts</text>
+  <text
+     x="190"
+     y="88"
+     fill="#0F172A"
+     font-family="Avenir Next, Segoe UI, Helvetica, Arial, sans-serif"
+     font-size="62"
+     font-weight="600"
+     letter-spacing="0.2"
+     id="text80">pycohortflow</text>
+  <text
+     x="192"
+     y="124"
+     fill="#334155"
+     font-family="Avenir Next, Segoe UI, Helvetica, Arial, sans-serif"
+     font-size="24"
+     font-weight="500"
+     id="text82">lightweight library for cohort flow charts</text>
 </svg>
