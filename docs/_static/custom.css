@@ -1,0 +1,43 @@
+/* Hide the separate site-name text next to the logo — the wide logo SVG
+   already contains the "pycohortflow" name. */
+.navbar-brand .navbar-brand-name {
+    display: none;
+}
+
+/* Two-column toctree grid for the landing page */
+.toctree-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+@media (max-width: 768px) {
+    .toctree-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.toctree-grid .card {
+    border: 1px solid var(--pst-color-border);
+    border-radius: 0.5rem;
+    padding: 1.25rem;
+}
+
+.toctree-grid .card h3 {
+    margin-top: 0;
+}
+
+/* Side-by-side images */
+.side-by-side {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    flex-wrap: wrap;
+}
+
+.side-by-side .figure,
+.side-by-side figure {
+    flex: 1;
+    min-width: 250px;
+}

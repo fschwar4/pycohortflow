@@ -1,0 +1,49 @@
+[figure]
+figsize_width = 12
+figsize_height = 8
+dpi = 200
+title_fontsize = 16
+title_fontweight = "bold"
+title_pad = 20
+
+[layout]
+main_title_width = 26
+main_text_width = 34
+exclusion_text_width = 30
+main_box_width = 2.8
+exclusion_box_width = 2.6
+base_gap = 0.8
+side_gap = 1.2
+top_margin = 0.8
+bottom_margin = 0.8
+x_padding = 0.6
+
+[box_geometry]
+padding = 0.52
+title_line_height = 0.42
+body_line_height = 0.33
+title_body_gap = 0.16
+text_top_padding = 0.24
+min_main_height = 1.6
+min_exclusion_height = 1.2
+clearance = 0.2
+corner_radius = 0.05
+pad_factor = 0.03
+
+[text]
+fontsize_title = 12
+fontsize_main = 10
+fontsize_exclusion = 9
+
+[lines]
+box_linewidth = 1
+connector_linewidth = 1
+arrow_mutation_scale = 20
+junction_radius = 0.004
+
+[colors]
+allow_named_colors = true
+main_start = "#ffffff"
+main_end = "#ffffff"
+exclusion_start = "#ffffff"
+exclusion_end = "#ffffff"

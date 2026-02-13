@@ -1,0 +1,40 @@
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="fbg" x1="2" y1="2" x2="30" y2="30" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#DFF1FF"/>
+      <stop offset="1" stop-color="#DFF7E8"/>
+    </linearGradient>
+    <linearGradient id="fmain" x1="5" y1="5" x2="18" y2="26" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#EAF6FF"/>
+      <stop offset="1" stop-color="#E8F8EB"/>
+    </linearGradient>
+    <linearGradient id="fexcl" x1="19" y1="12" x2="27" y2="18" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FEE8E8"/>
+      <stop offset="1" stop-color="#F8CCCC"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect x="1" y="1" width="30" height="30" rx="7" fill="url(#fbg)"/>
+
+  <!-- Main boxes -->
+  <rect x="4"  y="4"  width="13" height="5.5" rx="1.5" fill="url(#fmain)" stroke="#0F172A" stroke-width="1.2"/>
+  <rect x="4"  y="13" width="13" height="5.5" rx="1.5" fill="url(#fmain)" stroke="#0F172A" stroke-width="1.2"/>
+  <rect x="4"  y="22" width="13" height="5.5" rx="1.5" fill="url(#fmain)" stroke="#0F172A" stroke-width="1.2"/>
+
+  <!-- Vertical connectors -->
+  <line x1="10.5" y1="9.5"  x2="10.5" y2="13" stroke="#0F172A" stroke-width="1" stroke-linecap="round"/>
+  <line x1="10.5" y1="18.5" x2="10.5" y2="22" stroke="#0F172A" stroke-width="1" stroke-linecap="round"/>
+
+  <!-- Exclusion box from middle -->
+  <rect x="20" y="12.5" width="8" height="4.5" rx="1.2" fill="url(#fexcl)" stroke="#0F172A" stroke-width="1"/>
+
+  <!-- Horizontal connector -->
+  <line x1="17" y1="14.75" x2="20" y2="14.75" stroke="#0F172A" stroke-width="1" stroke-linecap="round"/>
+
+  <!-- Exclusion box from bottom -->
+  <rect x="20" y="22" width="8" height="4.5" rx="1.2" fill="url(#fexcl)" stroke="#0F172A" stroke-width="1"/>
+
+  <!-- Horizontal connector -->
+  <line x1="17" y1="24.25" x2="20" y2="24.25" stroke="#0F172A" stroke-width="1" stroke-linecap="round"/>
+</svg>

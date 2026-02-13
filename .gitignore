@@ -1,0 +1,29 @@
+# Build & dist
+build/
+dist/
+*.egg-info/
+*.egg
+__pycache__/
+*.pyc
+
+# Docs build
+docs/_build/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environments
+.venv/
+venv/
+
+# Linter
+.ruff_cache
+
+# PyTest
+.pytest_cache
+pytest-cache*
