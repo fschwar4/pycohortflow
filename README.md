@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/_static/logo_wide.svg" alt="pycohortflow logo" width="100%" />
+  <img src="https://fschwar4.github.io/pycohortflow/_static/logo_wide.svg" alt="pycohortflow logo" width="100%" />
 </p>
 
 # pycohortflow
@@ -43,8 +43,8 @@ plt.show()
 Two styles ship with the package:
 
 <p align="center">
-  <img src="docs/_static/clinical_flow_chart_white.png" alt="White style preview" width="45%" />
-  <img src="docs/_static/clinical_flow_chart_colorful.png" alt="Colorful style preview" width="45%" />
+  <img src="https://fschwar4.github.io/pycohortflow/_static/clinical_flow_chart_white.png" alt="White style preview" width="45%" />
+  <img src="https://fschwar4.github.io/pycohortflow/_static/clinical_flow_chart_colorful.png" alt="Colorful style preview" width="45%" />
 </p>
 
 ```python

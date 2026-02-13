@@ -4,13 +4,13 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pycohortflow"
-version = "0.1.0"
+version = "0.1.1"
 description = "Lightweight Cohort Flow Diagrams built on Matplotlib."
 readme = "README.md"
 license = "AGPL-3.0-only"
 requires-python = ">=3.9"
 authors = [
-    { name="fschwar4" },
+    { name="FSchwarz" },
 ]
 keywords = ["cohort", "flow diagram", "matplotlib", "clinical", "consort"]
 classifiers = [
@@ -47,10 +47,10 @@ docs = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/yourusername/pycohortflow"
-Documentation = "https://yourusername.github.io/pycohortflow/"
-Repository = "https://github.com/yourusername/pycohortflow"
-Issues = "https://github.com/yourusername/pycohortflow/issues"
+Homepage = "https://github.com/fschwar4/pycohortflow"
+Documentation = "https://fschwar4.github.io/pycohortflow/"
+Repository = "https://github.com/fschwar4/pycohortflow"
+Issues = "https://github.com/fschwar4/pycohortflow/issues"
 
 [tool.setuptools]
 include-package-data = true
