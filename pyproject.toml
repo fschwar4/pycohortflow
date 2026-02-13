@@ -7,7 +7,7 @@ name = "pycohortflow"
 version = "0.1.1"
 description = "Lightweight Cohort Flow Diagrams built on Matplotlib."
 readme = "README.md"
-license-expression = "AGPL-3.0-only"
+license = "AGPL-3.0-only"
 license-files = ["LICENSE*"]
 requires-python = ">=3.9"
 authors = [
