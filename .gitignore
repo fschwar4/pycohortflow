@@ -30,3 +30,7 @@ venv/
 # PyTest
 .pytest_cache
 pytest-cache*
+
+# Added from developer
+warnings_sphinx_build.txt
+pytest-output.txt
