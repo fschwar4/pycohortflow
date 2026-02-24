@@ -183,6 +183,16 @@ class TestSaving:
         assert (tmp_path / "multi.png").exists()
         assert (tmp_path / "multi.svg").exists()
 
+    def test_save_to_cwd_when_no_dir(self, sample_data, tmp_path, monkeypatch):
+        """Verify saving with save_dir=None writes to the current directory."""
+        monkeypatch.chdir(tmp_path)
+        plot_cohort_flow_diagram(
+            sample_data,
+            img_name="cwd_chart",
+            save_format="png",
+        )
+        assert (tmp_path / "cwd_chart.png").exists()
+
 
 # ---------------------------------------------------------------------------
 # Validation
@@ -205,3 +215,95 @@ class TestValidation:
         ]
         with pytest.raises(ValueError, match="more patients"):
             plot_cohort_flow_diagram(data)
+
+    def test_missing_n_key_raises(self):
+        """Verify a node without 'N' raises ValueError with helpful message."""
+        data = [{"heading": "Missing N"}]
+        with pytest.raises(ValueError, match="missing the required 'N' key"):
+            plot_cohort_flow_diagram(data)
+
+    def test_non_numeric_n_raises(self):
+        """Verify a non-numeric N value raises TypeError."""
+        data = [{"heading": "Bad", "N": "fifty"}]
+        with pytest.raises(TypeError, match="must be a non-negative number"):
+            plot_cohort_flow_diagram(data)
+
+    def test_boolean_n_raises(self):
+        """Verify a boolean N value raises TypeError (bool is subclass of int)."""
+        data = [{"heading": "Bad", "N": True}]
+        with pytest.raises(TypeError, match="must be a non-negative number"):
+            plot_cohort_flow_diagram(data)
+
+    def test_negative_n_raises(self):
+        """Verify a negative N value raises ValueError."""
+        data = [{"heading": "Negative", "N": -10}]
+        with pytest.raises(ValueError, match="negative N value"):
+            plot_cohort_flow_diagram(data)
+
+
+# ---------------------------------------------------------------------------
+# Keyword argument overrides
+# ---------------------------------------------------------------------------
+
+
+class TestKwargOverrides:
+    """Tests for ad-hoc overrides via **kwargs."""
+
+    def test_figsize_override(self, sample_data):
+        """Verify custom figsize is applied to the created figure."""
+        fig, ax = plot_cohort_flow_diagram(sample_data, figsize=(20, 15))
+        w, h = fig.get_size_inches()
+        assert w == pytest.approx(20)
+        assert h == pytest.approx(15)
+        plt.close(fig)
+
+    def test_dpi_override(self, sample_data):
+        """Verify custom dpi is applied to the created figure."""
+        fig, ax = plot_cohort_flow_diagram(sample_data, dpi=72)
+        assert fig.dpi == pytest.approx(72)
+        plt.close(fig)
+
+    def test_main_palette_override(self, sample_data):
+        """Verify custom main_palette renders without error."""
+        palette = ["#ff0000", "#00ff00", "#0000ff"]
+        fig, ax = plot_cohort_flow_diagram(sample_data, main_palette=palette)
+        assert isinstance(fig, plt.Figure)
+        plt.close(fig)
+
+    def test_exclusion_palette_override(self, sample_data):
+        """Verify custom exclusion_palette renders without error."""
+        palette = ["#ffaaaa", "#aaffaa", "#aaaaff"]
+        fig, ax = plot_cohort_flow_diagram(sample_data, exclusion_palette=palette)
+        assert isinstance(fig, plt.Figure)
+        plt.close(fig)
+
+
+# ---------------------------------------------------------------------------
+# Custom TOML config
+# ---------------------------------------------------------------------------
+
+
+class TestCustomConfig:
+    """Tests for loading a custom TOML style override file."""
+
+    def test_custom_toml_overrides(self, sample_data, tmp_path):
+        """Verify a custom TOML file is applied to the diagram."""
+        toml_content = "[figure]\ndpi = 72\n"
+        toml_file = tmp_path / "custom.toml"
+        toml_file.write_text(toml_content)
+
+        fig, ax = plot_cohort_flow_diagram(
+            sample_data,
+            style_config_path=str(toml_file),
+        )
+        assert fig.dpi == pytest.approx(72)
+        plt.close(fig)
+
+    def test_missing_toml_warns(self, sample_data):
+        """Verify a missing TOML path emits a warning instead of crashing."""
+        with pytest.warns(UserWarning, match="does not exist"):
+            fig, ax = plot_cohort_flow_diagram(
+                sample_data,
+                style_config_path="/nonexistent/path.toml",
+            )
+            plt.close(fig)

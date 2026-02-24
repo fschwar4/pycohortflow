@@ -6,6 +6,7 @@ TOML-based style configuration loading used internally by
 """
 
 import textwrap
+import warnings
 from importlib import resources
 from pathlib import Path
 
@@ -74,8 +75,8 @@ def save_figure(fig, save_dir, img_name, save_format):
     for fmt in save_format:
         clean_fmt = fmt.lstrip(".")
         full_path = output_dir / f"{img_name}.{clean_fmt}"
-        fig.savefig(full_path, bbox_inches="tight", dpi=300)
-        print(f"Saved: {full_path}")
+        fig.savefig(full_path, bbox_inches="tight", dpi=fig.dpi)
+        warnings.warn(f"Saved: {full_path}", stacklevel=2)
 
 
 # ---------------------------------------------------------------------------
@@ -220,8 +221,10 @@ def gradient_palette(start_hex, end_hex, n):
         ['#000000', '#808080', '#ffffff']
 
     """
-    if n <= 1:
-        return [start_hex]
+    if n <= 0:
+        return []
+    if n == 1:
+        return [mcolors.to_hex(start_hex, keep_alpha=False)]
     s_hex = mcolors.to_hex(start_hex, keep_alpha=False)
     e_hex = mcolors.to_hex(end_hex, keep_alpha=False)
     return [_interpolate_color(s_hex, e_hex, i / (n - 1)) for i in range(n)]
@@ -277,25 +280,27 @@ def resolve_color(color_value, default_value, allow_named_colors=True):
 
 
 def _recursive_update(default, override):
-    """Recursively merge *override* into *default* (in-place).
+    """Recursively merge *override* into *default*, returning a new dict.
 
     Nested dictionaries are merged key-by-key; all other value types in
-    *override* simply replace those in *default*.
+    *override* simply replace those in *default*.  The original *default*
+    dictionary is **not** modified.
 
     Args:
-        default (dict): Base configuration dictionary (modified in-place).
+        default (dict): Base configuration dictionary (not modified).
         override (dict): Dictionary whose values take precedence.
 
     Returns:
-        dict: The mutated *default* dictionary.
+        dict: A new dictionary with merged values.
 
     """
+    result = {**default}
     for key, value in override.items():
-        if isinstance(value, dict) and key in default:
-            default[key] = _recursive_update(default[key], value)
+        if isinstance(value, dict) and key in result and isinstance(result[key], dict):
+            result[key] = _recursive_update(result[key], value)
         else:
-            default[key] = value
-    return default
+            result[key] = value
+    return result
 
 
 def load_style_config(style="white", custom_config_path=None):
@@ -338,63 +343,82 @@ def load_style_config(style="white", custom_config_path=None):
 
     toml_filename = _BUILTIN_STYLES[style]
 
+    # Minimal hard-coded fallback (white style base)
+    _fallback_config = {
+        "figure": {
+            "dpi": 200,
+            "figsize_width": 12,
+            "figsize_height": 8,
+            "title_fontsize": 16,
+            "title_fontweight": "bold",
+            "title_pad": 20,
+        },
+        "layout": {
+            "main_title_width": 26,
+            "main_text_width": 34,
+            "exclusion_text_width": 30,
+            "main_box_width": 2.8,
+            "exclusion_box_width": 2.6,
+            "base_gap": 0.8,
+            "side_gap": 1.2,
+            "top_margin": 0.8,
+            "bottom_margin": 0.8,
+            "x_padding": 0.6,
+        },
+        "box_geometry": {
+            "padding": 0.52,
+            "title_line_height": 0.42,
+            "body_line_height": 0.33,
+            "title_body_gap": 0.16,
+            "text_top_padding": 0.24,
+            "min_main_height": 1.6,
+            "min_exclusion_height": 1.2,
+            "clearance": 0.2,
+            "corner_radius": 0.05,
+            "pad_factor": 0.03,
+        },
+        "text": {
+            "fontsize_title": 12,
+            "fontsize_main": 10,
+            "fontsize_exclusion": 9,
+        },
+        "lines": {
+            "box_linewidth": 1,
+            "connector_linewidth": 1,
+            "arrow_mutation_scale": 20,
+            "junction_radius": 0.004,
+        },
+        "colors": {
+            "allow_named_colors": True,
+            "main_start": "#ffffff",
+            "main_end": "#ffffff",
+            "exclusion_start": "#ffffff",
+            "exclusion_end": "#ffffff",
+        },
+    }
+
+    # Colorful style overrides for the fallback path
+    _colorful_overrides = {
+        "colors": {
+            "main_start": "#dff1ff",
+            "main_end": "#dff7e8",
+            "exclusion_start": "#fee8e8",
+            "exclusion_end": "#f8cccc",
+        },
+    }
+
     try:
         style_file = resources.files("pycohortflow").joinpath("styles").joinpath(toml_filename)
         config = tomllib.loads(style_file.read_text(encoding="utf-8"))
-    except Exception:
-        # Minimal hard-coded fallback (white style)
-        config = {
-            "figure": {
-                "dpi": 200,
-                "figsize_width": 12,
-                "figsize_height": 8,
-                "title_fontsize": 16,
-                "title_fontweight": "bold",
-                "title_pad": 20,
-            },
-            "layout": {
-                "main_title_width": 26,
-                "main_text_width": 34,
-                "exclusion_text_width": 30,
-                "main_box_width": 2.8,
-                "exclusion_box_width": 2.6,
-                "base_gap": 0.8,
-                "side_gap": 1.2,
-                "top_margin": 0.8,
-                "bottom_margin": 0.8,
-                "x_padding": 0.6,
-            },
-            "box_geometry": {
-                "padding": 0.52,
-                "title_line_height": 0.42,
-                "body_line_height": 0.33,
-                "title_body_gap": 0.16,
-                "text_top_padding": 0.24,
-                "min_main_height": 1.6,
-                "min_exclusion_height": 1.2,
-                "clearance": 0.2,
-                "corner_radius": 0.05,
-                "pad_factor": 0.03,
-            },
-            "text": {
-                "fontsize_title": 12,
-                "fontsize_main": 10,
-                "fontsize_exclusion": 9,
-            },
-            "lines": {
-                "box_linewidth": 1,
-                "connector_linewidth": 1,
-                "arrow_mutation_scale": 20,
-                "junction_radius": 0.004,
-            },
-            "colors": {
-                "allow_named_colors": True,
-                "main_start": "#ffffff",
-                "main_end": "#ffffff",
-                "exclusion_start": "#ffffff",
-                "exclusion_end": "#ffffff",
-            },
-        }
+    except (FileNotFoundError, OSError, tomllib.TOMLDecodeError) as exc:
+        warnings.warn(
+            f"Could not load built-in style '{style}' from package data: {exc}. "
+            "Falling back to hard-coded defaults.",
+            stacklevel=2,
+        )
+        config = _fallback_config
+        if style == "colorful":
+            config = _recursive_update(config, _colorful_overrides)
 
     # 2. Merge user overrides
     if custom_config_path:
@@ -404,6 +428,9 @@ def load_style_config(style="white", custom_config_path=None):
                 user_config = tomllib.load(f)
             config = _recursive_update(config, user_config)
         else:
-            print(f"Warning: Custom config path '{custom_config_path}' does not exist. Ignoring.")
+            warnings.warn(
+                f"Custom config path '{custom_config_path}' does not exist. Ignoring.",
+                stacklevel=2,
+            )
 
     return config

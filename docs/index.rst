@@ -13,6 +13,10 @@ pycohortflow
 vertical flow chart in a single function call.  Colours, fonts, spacing,
 and box geometry are fully customisable through TOML configuration files.
 
+**Don't want to install anything?** Use the
+:doc:`Interactive Generator <generator>` to **build diagrams directly in
+your browser** and export them as SVG, PNG or PDF.
+
 .. code-block:: python
 
    from pycohortflow import plot_cohort_flow_diagram
@@ -39,11 +43,17 @@ and box geometry are fully customisable through TOML configuration files.
        </ul>
      </div>
      <div class="card">
-       <h3>API Reference</h3>
+       <h3>Python API</h3>
        <ul>
-         <li><a href="api.html">API Reference</a> — full API documentation</li>
+         <li><a href="api.html">Python API</a> — full API documentation</li>
          <li><a href="api_cfd.html">cfd — Plotting</a> — <code>plot_cohort_flow_diagram</code></li>
          <li><a href="api_cfd_util.html">cfd_util — Utilities</a> — colours, config, helpers</li>
+       </ul>
+     </div>
+     <div class="card">
+       <h3>Interactive Generator</h3>
+       <ul>
+         <li><a href="generator.html">Try it in the browser</a> — build diagrams without installing Python</li>
        </ul>
      </div>
    </div>
@@ -62,8 +72,15 @@ and box geometry are fully customisable through TOML configuration files.
    documentation
 
 .. toctree::
+   :maxdepth: 1
+   :caption: Tools
+   :hidden:
+
+   generator
+
+.. toctree::
    :maxdepth: 3
-   :caption: API Reference
+   :caption: Python API
    :hidden:
 
    api

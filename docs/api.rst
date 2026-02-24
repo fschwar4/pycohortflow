@@ -1,5 +1,5 @@
-API Reference
-=============
+Python API
+==========
 
 The ``pycohortflow`` package is organised into two modules.
 

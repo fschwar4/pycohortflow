@@ -188,3 +188,10 @@ touching any file:
 
 The priority order is: **keyword arguments > custom TOML file > built-in
 style defaults**.
+
+.. tip::
+
+   The same TOML configuration format is supported by the
+   :doc:`Interactive Generator <generator>`.  Paste overrides into the
+   "TOML overrides" field to preview style changes without writing any
+   Python code.

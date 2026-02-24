@@ -47,10 +47,10 @@ def plot_cohort_flow_diagram(
             * ``"description"`` (``str``) – Body text below the title.
             * ``"exclusion_description"`` (``str``) – Label for the
               side-exclusion box (defaults to ``"Excluded"``).
-            * ``"color"`` / ``"color_name"`` (``str``) – Override colour
-              for this node's main box.
-            * ``"exclusion_color"`` / ``"exclusion_color_name"`` (``str``)
-              – Override colour for the exclusion box.
+            * ``"color"`` (``str``) – Override colour for this node's
+              main box (hex string or Matplotlib colour name).
+            * ``"exclusion_color"`` (``str``) – Override colour for the
+              exclusion box.
 
         ax (matplotlib.axes.Axes | None): An existing Matplotlib axes
             object to draw on.  When provided the function does **not**
@@ -122,6 +122,22 @@ def plot_cohort_flow_diagram(
     if not data:
         raise ValueError("data must contain at least one cohort node.")
 
+    for i, node in enumerate(data):
+        if "N" not in node:
+            raise ValueError(
+                f"Node {i} is missing the required 'N' key. "
+                "Every cohort step must include an 'N' field with the participant count."
+            )
+        if not isinstance(node["N"], (int, float)) or isinstance(node["N"], bool):
+            raise TypeError(
+                f"Node {i} has N={node['N']!r} (type {type(node['N']).__name__}). "
+                "'N' must be a non-negative number."
+            )
+        if node["N"] < 0:
+            raise ValueError(
+                f"Node {i} has a negative N value ({node['N']}). 'N' must be a non-negative number."
+            )
+
     # ── 1. Load Configuration ──────────────────────────────────────────
     cfg = load_style_config(style=style, custom_config_path=style_config_path)
 
@@ -180,10 +196,8 @@ def plot_cohort_flow_diagram(
         excl_h = max(geom["min_exclusion_height"], excl_h_calc)
 
         # Colour resolution
-        main_color_raw = node.get("color", node.get("color_name", main_palette[i]))
-        excl_color_raw = node.get(
-            "exclusion_color", node.get("exclusion_color_name", excl_palette[i])
-        )
+        main_color_raw = node.get("color", main_palette[i])
+        excl_color_raw = node.get("exclusion_color", excl_palette[i])
 
         processed_nodes.append(
             {
@@ -369,7 +383,7 @@ def plot_cohort_flow_diagram(
                     ha="center",
                     va="center",
                     fontsize=txt["fontsize_exclusion"],
-                    style="italic",
+                    fontstyle="italic",
                     zorder=3,
                 )
 

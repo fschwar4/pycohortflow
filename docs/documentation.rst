@@ -28,6 +28,13 @@ This section covers everything you need to get started with
        <p><a class="reference internal" href="development.html">
        Go to Development &rarr;</a></p>
      </div>
+     <div class="card">
+       <h3>Interactive Generator</h3>
+       <p>Build cohort flow diagrams directly in the browser —
+       no Python installation required. Export as SVG, PNG or PDF.</p>
+       <p><a class="reference internal" href="generator.html">
+       Open Generator &rarr;</a></p>
+     </div>
    </div>
 
 .. toctree::

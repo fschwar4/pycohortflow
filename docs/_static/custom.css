@@ -41,3 +41,106 @@
     flex: 1;
     min-width: 250px;
 }
+
+/* ── Interactive Generator (generator.rst) ────────────────────────── */
+
+#cfgen-app {
+    margin-top: 1rem;
+}
+
+.cfgen-row {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.cfgen-col-main { flex: 3; }
+.cfgen-col-side { flex: 2; display: flex; flex-direction: column; gap: 0.5rem; }
+
+@media (max-width: 768px) {
+    .cfgen-row { flex-direction: column; }
+}
+
+#cfgen-app label {
+    display: block;
+    margin-top: 0.25rem;
+    font-size: 0.9rem;
+}
+
+#cfgen-app textarea,
+#cfgen-app input[type="text"],
+#cfgen-app select {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.45rem 0.6rem;
+    border: 1px solid var(--pst-color-border);
+    border-radius: 4px;
+    font-family: SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 0.82rem;
+    background: var(--pst-color-surface);
+    color: var(--pst-color-text-base);
+}
+
+#cfgen-data { resize: vertical; }
+
+.cfgen-cb-label {
+    display: flex !important;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.9rem;
+}
+
+.cfgen-btn {
+    padding: 0.5rem 1.2rem;
+    border: 1px solid var(--pst-color-border);
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    background: var(--pst-color-surface);
+    color: var(--pst-color-text-base);
+    transition: background 0.15s;
+}
+
+.cfgen-btn:hover:not(:disabled) {
+    background: var(--pst-color-background);
+}
+
+.cfgen-btn-primary {
+    background: var(--pst-color-primary);
+    color: #fff;
+    border-color: var(--pst-color-primary);
+    margin-top: auto;
+}
+
+.cfgen-btn-primary:hover {
+    opacity: 0.9;
+}
+
+.cfgen-error {
+    display: none;
+    padding: 0.6rem 1rem;
+    margin-bottom: 1rem;
+    border-radius: 4px;
+    background: #fef2f2;
+    color: #b91c1c;
+    border: 1px solid #fecaca;
+    font-size: 0.9rem;
+}
+
+.cfgen-preview {
+    min-height: 120px;
+    margin-bottom: 1rem;
+    overflow-x: auto;
+    text-align: center;
+}
+
+.cfgen-preview svg {
+    max-width: 100%;
+    height: auto;
+}
+
+.cfgen-export-row {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}

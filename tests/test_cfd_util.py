@@ -12,6 +12,7 @@ from pycohortflow.cfd_util import (
     load_style_config,
     named_color,
     resolve_color,
+    save_figure,
     wrap_lines,
 )
 
@@ -109,6 +110,16 @@ class TestGradientPalette:
         assert result[0] == "#000000"
         assert result[-1] == "#ffffff"
 
+    def test_zero_returns_empty(self):
+        """Verify n=0 returns an empty list."""
+        result = gradient_palette("#000000", "#ffffff", 0)
+        assert result == []
+
+    def test_negative_returns_empty(self):
+        """Verify negative n returns an empty list."""
+        result = gradient_palette("#000000", "#ffffff", -1)
+        assert result == []
+
 
 # ---------------------------------------------------------------------------
 # resolve_color
@@ -157,6 +168,50 @@ class TestRecursiveUpdate:
         result = _recursive_update(base, {"x": {"z": 99}})
         assert result == {"x": {"y": 1, "z": 99}}
 
+    def test_does_not_mutate_original(self):
+        """Verify _recursive_update does not modify the original dict."""
+        base = {"a": 1, "nested": {"b": 2, "c": 3}}
+        original_base = {"a": 1, "nested": {"b": 2, "c": 3}}
+        _recursive_update(base, {"a": 99, "nested": {"c": 99}})
+        assert base == original_base
+
+    def test_returns_new_dict(self):
+        """Verify _recursive_update returns a new dictionary object."""
+        base = {"a": 1}
+        result = _recursive_update(base, {"b": 2})
+        assert result is not base
+
+
+# ---------------------------------------------------------------------------
+# save_figure
+# ---------------------------------------------------------------------------
+
+
+class TestSaveFigure:
+    """Tests for the figure saving helper."""
+
+    def test_uses_figure_dpi(self, tmp_path):
+        """Verify save_figure uses the figure's own DPI, not a hardcoded value."""
+        import matplotlib
+        import matplotlib.pyplot as plt
+
+        matplotlib.use("Agg")
+        fig, ax = plt.subplots(dpi=72)
+        save_figure(fig, str(tmp_path), "dpi_test", "png")
+        assert (tmp_path / "dpi_test.png").exists()
+        plt.close(fig)
+
+    def test_empty_img_name_skips(self, tmp_path):
+        """Verify save_figure returns early when img_name is empty."""
+        import matplotlib
+        import matplotlib.pyplot as plt
+
+        matplotlib.use("Agg")
+        fig, ax = plt.subplots()
+        save_figure(fig, str(tmp_path), "", "png")
+        assert list(tmp_path.iterdir()) == []
+        plt.close(fig)
+
 
 # ---------------------------------------------------------------------------
 # load_style_config
@@ -186,3 +241,20 @@ class TestLoadStyleConfig:
         cfg = load_style_config()
         for section in ("figure", "layout", "box_geometry", "text", "lines", "colors"):
             assert section in cfg, f"Missing section: {section}"
+
+    def test_custom_config_override(self, tmp_path):
+        """Verify a custom TOML file overrides specific values."""
+        toml_file = tmp_path / "override.toml"
+        toml_file.write_text("[figure]\ndpi = 42\n")
+
+        cfg = load_style_config("white", custom_config_path=str(toml_file))
+        assert cfg["figure"]["dpi"] == 42
+        # Other values should remain at default
+        assert cfg["figure"]["figsize_width"] == 12
+
+    def test_missing_custom_config_warns(self):
+        """Verify a missing custom config path emits a warning."""
+        with pytest.warns(UserWarning, match="does not exist"):
+            cfg = load_style_config("white", custom_config_path="/nonexistent.toml")
+        # Should still return a valid config
+        assert "figure" in cfg

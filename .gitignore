@@ -17,6 +17,9 @@ docs/_build/
 .DS_Store
 Thumbs.db
 
+# Markdown rendering cache (e.g. VS Code / Jupyter image preview)
+*_files/
+
 # Environments
 .venv/
 venv/

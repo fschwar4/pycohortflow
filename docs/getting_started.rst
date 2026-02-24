@@ -219,4 +219,5 @@ Next Steps
 ----------
 
 * Customise the visual appearance using a TOML file — see :doc:`customise`.
-* Explore the full API reference — see :doc:`api`.
+* Explore the full Python API — see :doc:`api`.
+* Build diagrams without installing Python — try the :doc:`Interactive Generator <generator>`.

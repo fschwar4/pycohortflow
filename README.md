@@ -17,6 +17,10 @@ Lightweight cohort flow diagrams built on Matplotlib.
 
 Turn a plain Python list of cohort steps into a publication-ready vertical flow chart with a single function call. Colours, fonts, spacing, and box geometry are fully customisable via TOML configuration files.
 
+## No Python installed?
+
+**Use the [Interactive Generator](https://fschwar4.github.io/pycohortflow/generator.html) to build diagrams directly in your browser and export them as SVG, PNG or PDF.**
+
 ## Installation
 
 ```bash
@@ -86,7 +90,7 @@ Then pass it when plotting:
 fig, ax = plot_cohort_flow_diagram(data, style_config_path="my_style.toml")
 ```
 
-See the [full documentation](https://yourusername.github.io/pycohortflow/) for all available options.
+See the [full documentation](https://fschwar4.github.io/pycohortflow/) for all available options.
 
 ## Saving Figures
 
@@ -112,4 +116,7 @@ AGPL-3.0 license
 
 ## Roadmap
 
-- [ ] python based PRISMA2020 style generation, if necessary
+- [ ] Add: Python-based PRISMA2020 style generation, if necessary
+- [ ] Add: Small Diagram version
+- [ ] Add: Verbose option for communication of saving options
+- [ ] Add: Diagrams for multiple Arms (e.g. something like CONSORT style)

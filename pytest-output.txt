@@ -1,0 +1,92 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.12.9, pytest-9.0.2, pluggy-1.6.0 -- /Users/friedrichschwarz/mambaforge/envs/da_analysis/bin/python3.12
+cachedir: .pytest_cache
+rootdir: /Users/friedrichschwarz/Desktop/Projekte/HaemOnko/flowchart_diagram/claude_js/pycohortflow
+configfile: pyproject.toml
+testpaths: tests
+plugins: anyio-4.9.0, zarr-3.1.5
+collecting ... collected 59 items
+
+tests/test_cfd.py::TestBasicPlotting::test_returns_figure_and_axes PASSED [  1%]
+tests/test_cfd.py::TestBasicPlotting::test_single_node PASSED            [  3%]
+tests/test_cfd.py::TestBasicPlotting::test_figure_title PASSED           [  5%]
+tests/test_cfd.py::TestExternalAxes::test_uses_provided_axes PASSED      [  6%]
+tests/test_cfd.py::TestExternalAxes::test_returns_parent_figure PASSED   [  8%]
+tests/test_cfd.py::TestExternalAxes::test_title_on_provided_axes PASSED  [ 10%]
+tests/test_cfd.py::TestExternalAxes::test_no_ax_creates_new_figure PASSED [ 11%]
+tests/test_cfd.py::TestStyles::test_white_style PASSED                   [ 13%]
+tests/test_cfd.py::TestStyles::test_colorful_style PASSED                [ 15%]
+tests/test_cfd.py::TestStyles::test_unknown_style_raises PASSED          [ 16%]
+tests/test_cfd.py::TestTransparent::test_transparent_flag PASSED         [ 18%]
+tests/test_cfd.py::TestTransparent::test_opaque_by_default PASSED        [ 20%]
+tests/test_cfd.py::TestSaving::test_save_png PASSED                      [ 22%]
+tests/test_cfd.py::TestSaving::test_save_multiple_formats PASSED         [ 23%]
+tests/test_cfd.py::TestSaving::test_save_to_cwd_when_no_dir PASSED       [ 25%]
+tests/test_cfd.py::TestValidation::test_empty_data_raises PASSED         [ 27%]
+tests/test_cfd.py::TestValidation::test_increasing_n_raises PASSED       [ 28%]
+tests/test_cfd.py::TestValidation::test_missing_n_key_raises PASSED      [ 30%]
+tests/test_cfd.py::TestValidation::test_non_numeric_n_raises PASSED      [ 32%]
+tests/test_cfd.py::TestValidation::test_boolean_n_raises PASSED          [ 33%]
+tests/test_cfd.py::TestValidation::test_negative_n_raises PASSED         [ 35%]
+tests/test_cfd.py::TestKwargOverrides::test_figsize_override PASSED      [ 37%]
+tests/test_cfd.py::TestKwargOverrides::test_dpi_override PASSED          [ 38%]
+tests/test_cfd.py::TestKwargOverrides::test_main_palette_override PASSED [ 40%]
+tests/test_cfd.py::TestKwargOverrides::test_exclusion_palette_override PASSED [ 42%]
+tests/test_cfd.py::TestCustomConfig::test_custom_toml_overrides PASSED   [ 44%]
+tests/test_cfd.py::TestCustomConfig::test_missing_toml_warns PASSED      [ 45%]
+tests/test_cfd_util.py::TestWrapLines::test_empty_string PASSED          [ 47%]
+tests/test_cfd_util.py::TestWrapLines::test_short_string PASSED          [ 49%]
+tests/test_cfd_util.py::TestWrapLines::test_wraps_correctly PASSED       [ 50%]
+tests/test_cfd_util.py::TestColourHelpers::test_hex_to_rgb PASSED        [ 52%]
+tests/test_cfd_util.py::TestColourHelpers::test_hex_to_rgb_strips_alpha PASSED [ 54%]
+tests/test_cfd_util.py::TestColourHelpers::test_rgb_to_hex PASSED        [ 55%]
+tests/test_cfd_util.py::TestColourHelpers::test_roundtrip PASSED         [ 57%]
+tests/test_cfd_util.py::TestColourHelpers::test_interpolate_endpoints PASSED [ 59%]
+tests/test_cfd_util.py::TestColourHelpers::test_interpolate_midpoint PASSED [ 61%]
+tests/test_cfd_util.py::TestColourHelpers::test_named_color PASSED       [ 62%]
+tests/test_cfd_util.py::TestColourHelpers::test_named_colors_list PASSED [ 64%]
+tests/test_cfd_util.py::TestGradientPalette::test_single_colour PASSED   [ 66%]
+tests/test_cfd_util.py::TestGradientPalette::test_correct_length PASSED  [ 67%]
+tests/test_cfd_util.py::TestGradientPalette::test_endpoints PASSED       [ 69%]
+tests/test_cfd_util.py::TestGradientPalette::test_zero_returns_empty PASSED [ 71%]
+tests/test_cfd_util.py::TestGradientPalette::test_negative_returns_empty PASSED [ 72%]
+tests/test_cfd_util.py::TestResolveColor::test_none_uses_default PASSED  [ 74%]
+tests/test_cfd_util.py::TestResolveColor::test_explicit_value PASSED     [ 76%]
+tests/test_cfd_util.py::TestResolveColor::test_named_color_disallowed PASSED [ 77%]
+tests/test_cfd_util.py::TestResolveColor::test_invalid_color PASSED      [ 79%]
+tests/test_cfd_util.py::TestRecursiveUpdate::test_flat_merge PASSED      [ 81%]
+tests/test_cfd_util.py::TestRecursiveUpdate::test_nested_merge PASSED    [ 83%]
+tests/test_cfd_util.py::TestRecursiveUpdate::test_does_not_mutate_original PASSED [ 84%]
+tests/test_cfd_util.py::TestRecursiveUpdate::test_returns_new_dict PASSED [ 86%]
+tests/test_cfd_util.py::TestSaveFigure::test_uses_figure_dpi PASSED      [ 88%]
+tests/test_cfd_util.py::TestSaveFigure::test_empty_img_name_skips PASSED [ 89%]
+tests/test_cfd_util.py::TestLoadStyleConfig::test_white_style PASSED     [ 91%]
+tests/test_cfd_util.py::TestLoadStyleConfig::test_colorful_style PASSED  [ 93%]
+tests/test_cfd_util.py::TestLoadStyleConfig::test_unknown_style_raises PASSED [ 94%]
+tests/test_cfd_util.py::TestLoadStyleConfig::test_all_sections_present PASSED [ 96%]
+tests/test_cfd_util.py::TestLoadStyleConfig::test_custom_config_override PASSED [ 98%]
+tests/test_cfd_util.py::TestLoadStyleConfig::test_missing_custom_config_warns PASSED [100%]
+
+=============================== warnings summary ===============================
+tests/test_cfd.py::TestSaving::test_save_png
+  /Users/friedrichschwarz/Desktop/Projekte/HaemOnko/flowchart_diagram/claude_js/pycohortflow/src/pycohortflow/cfd.py:397: UserWarning: Saved: /private/var/folders/44/d1_rx5gs6hx121g9yghqhvm80000gn/T/pytest-of-friedrichschwarz/pytest-20/test_save_png0/test_chart.png
+    save_figure(fig, save_dir, img_name, save_format)
+
+tests/test_cfd.py::TestSaving::test_save_multiple_formats
+  /Users/friedrichschwarz/Desktop/Projekte/HaemOnko/flowchart_diagram/claude_js/pycohortflow/src/pycohortflow/cfd.py:397: UserWarning: Saved: /private/var/folders/44/d1_rx5gs6hx121g9yghqhvm80000gn/T/pytest-of-friedrichschwarz/pytest-20/test_save_multiple_formats0/multi.png
+    save_figure(fig, save_dir, img_name, save_format)
+
+tests/test_cfd.py::TestSaving::test_save_multiple_formats
+  /Users/friedrichschwarz/Desktop/Projekte/HaemOnko/flowchart_diagram/claude_js/pycohortflow/src/pycohortflow/cfd.py:397: UserWarning: Saved: /private/var/folders/44/d1_rx5gs6hx121g9yghqhvm80000gn/T/pytest-of-friedrichschwarz/pytest-20/test_save_multiple_formats0/multi.svg
+    save_figure(fig, save_dir, img_name, save_format)
+
+tests/test_cfd.py::TestSaving::test_save_to_cwd_when_no_dir
+  /Users/friedrichschwarz/Desktop/Projekte/HaemOnko/flowchart_diagram/claude_js/pycohortflow/src/pycohortflow/cfd.py:397: UserWarning: Saved: cwd_chart.png
+    save_figure(fig, save_dir, img_name, save_format)
+
+tests/test_cfd_util.py::TestSaveFigure::test_uses_figure_dpi
+  /Users/friedrichschwarz/Desktop/Projekte/HaemOnko/flowchart_diagram/claude_js/pycohortflow/tests/test_cfd_util.py:200: UserWarning: Saved: /private/var/folders/44/d1_rx5gs6hx121g9yghqhvm80000gn/T/pytest-of-friedrichschwarz/pytest-20/test_uses_figure_dpi0/dpi_test.png
+    save_figure(fig, str(tmp_path), "dpi_test", "png")
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+======================== 59 passed, 5 warnings in 0.75s ========================

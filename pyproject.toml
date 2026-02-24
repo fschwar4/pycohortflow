@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pycohortflow"
-version = "0.1.1"
-description = "Lightweight Cohort Flow Diagrams built on Matplotlib."
+version = "0.1.2"
+description = "Lightweight Cohort Flow Diagrams built on Matplotlib — with an interactive browser-based generator."
 readme = "README.md"
 license = "AGPL-3.0-only"
 license-files = ["LICENSE*"]
