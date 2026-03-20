@@ -51,6 +51,7 @@ Project Layout
    ├── docs/                      # Sphinx documentation
    ├── .github/workflows/         # CI/CD pipelines
    ├── pyproject.toml             # project metadata & build config
+   ├── CHANGELOG.md               # release history (Keep a Changelog)
    └── MANIFEST.in                # sdist inclusion rules
 
 Running the Tests
@@ -155,6 +156,85 @@ Publishing to PyPI
 
    You will need a PyPI API token configured in your ``~/.pypirc`` or
    passed via ``--username __token__ --password <token>``.
+
+Git Tags
+--------
+
+Every release must have a corresponding annotated git tag matching the
+version in ``pyproject.toml``.  Tag names use the ``v`` prefix
+(e.g. ``v0.2.0``).
+
+1. **Create an annotated tag:**
+
+   .. code-block:: bash
+
+      git tag -a v0.2.0 -m "Release 0.2.0"
+
+   Use the same message format consistently.  For a longer annotation,
+   summarise the highlights from the changelog.
+
+2. **Push the tag to GitHub:**
+
+   .. code-block:: bash
+
+      git push origin v0.2.0
+
+   Or push all local tags at once:
+
+   .. code-block:: bash
+
+      git push origin --tags
+
+GitHub Releases
+---------------
+
+After pushing a tag, create a GitHub Release so that the version is
+visible on the repository's *Releases* page and users receive
+notifications.
+
+1. **Via the GitHub CLI** (``gh``):
+
+   .. code-block:: bash
+
+      gh release create v0.2.0 \
+        --title "v0.2.0" \
+        --notes-file CHANGELOG.md
+
+   The ``--notes-file`` flag uploads the full changelog as the release
+   body.  To include only the notes for the current version, extract the
+   relevant section first or pass ``--notes "…"`` directly.
+
+2. **Via the GitHub web UI:**
+
+   Go to *Releases → Draft a new release*, choose the tag you just
+   pushed, paste the changelog entry for this version into the
+   description, and click *Publish release*.
+
+.. tip::
+
+   Keep the ``CHANGELOG.md`` file up to date **before** tagging.  The
+   release workflow is: update changelog → bump version in
+   ``pyproject.toml`` → commit → tag → push → publish to PyPI →
+   create GitHub release.
+
+Changelog
+---------
+
+The project maintains a ``CHANGELOG.md`` in the repository root,
+following the `Keep a Changelog <https://keepachangelog.com/>`_ format.
+Each release section uses these categories:
+
+- **Added** — new features.
+- **Changed** — changes to existing functionality.
+- **Deprecated** — features that will be removed in a future release.
+- **Removed** — features that have been removed.
+- **Fixed** — bug fixes.
+- **Security** — vulnerability fixes.
+
+An ``[Unreleased]`` section at the top collects changes that have not
+yet been tagged.  When cutting a release, rename ``[Unreleased]`` to the
+new version and date, add a fresh empty ``[Unreleased]`` heading, and
+update the comparison links at the bottom of the file.
 
 Test Suite Reference
 --------------------
