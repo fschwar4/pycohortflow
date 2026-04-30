@@ -17,6 +17,20 @@ and box geometry are fully customisable through TOML configuration files.
 :doc:`Interactive Generator <generator>` to **build diagrams directly in
 your browser** and export them as SVG, PNG or PDF.
 
+.. raw:: html
+
+   <div class="toctree-grid">
+     <div class="card card-wide card-centered">
+       <h3>Interactive Generator</h3>
+       <ul>
+         <li><a href="generator.html">Try it in the browser</a> — build diagrams without installing Python</li>
+       </ul>
+     </div>
+   </div>
+
+Quickstart
+----------
+
 .. code-block:: python
 
    from pycohortflow import plot_cohort_flow_diagram
@@ -48,12 +62,6 @@ your browser** and export them as SVG, PNG or PDF.
          <li><a href="api.html">Python API</a> — full API documentation</li>
          <li><a href="api_cfd.html">cfd — Plotting</a> — <code>plot_cohort_flow_diagram</code></li>
          <li><a href="api_cfd_util.html">cfd_util — Utilities</a> — colours, config, helpers</li>
-       </ul>
-     </div>
-     <div class="card">
-       <h3>Interactive Generator</h3>
-       <ul>
-         <li><a href="generator.html">Try it in the browser</a> — build diagrams without installing Python</li>
        </ul>
      </div>
    </div>

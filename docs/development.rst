@@ -121,6 +121,17 @@ Building the Documentation Locally
 
 Open ``docs/_build/html/index.html`` in a browser to preview.
 
+Alternatively, serve the built docs over a local HTTP server so that
+relative links, JavaScript modules and the Interactive Generator behave
+as they would in production:
+
+.. code-block:: bash
+
+   python -m http.server --directory docs/_build/html
+
+Then open http://localhost:8000 in a browser. Use ``Ctrl+C`` to stop
+the server.
+
 Publishing to PyPI
 ------------------
 

@@ -7,6 +7,38 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.3] - 2026-04-30
+
+### Changed
+
+- Default `colorful` style: red exclusion gradient now runs from dark
+  to bright (`exclusion_start = "#f8cccc"`, `exclusion_end = "#fee8e8"`)
+  instead of bright to dark. Mirrored in the Python fallback config
+  (`cfd_util.py`), the docs static TOML, the JavaScript web-generator
+  fallback (`docs/_static/js/config.js`), and the `customise.rst`
+  example.
+- Landing page: the "Interactive Generator" card has been promoted to
+  the very top of the page — directly under the "Don't want to install
+  anything?" lead paragraph and **above the Python quick-start code
+  example** — so the no-install path is the first thing visitors see.
+  It spans the full width (double width) of the toctree grid, with its
+  heading and link centred. The "Documentation" and "Python API" cards
+  remain side-by-side in a second grid below the code example.
+  Implemented via new `card-wide` and `card-centered` modifier classes
+  (`grid-column: 1 / -1`, `text-align: center`) in
+  `docs/_static/custom.css`, and by splitting the single landing-page
+  grid into two `.. raw:: html` blocks in `docs/index.rst`.
+
+### Added
+
+- Developer documentation: instruction to serve the built docs with
+  `python -m http.server --directory docs/_build/html` after running
+  `sphinx-build`, so relative links, JS modules and the Interactive
+  Generator behave as in production.
+- Landing page: new "Quickstart" section heading above the Python
+  code example so the snippet has an explicit, navigable section
+  title (visible in the page TOC).
+
 ## [0.1.2] - 2026-02-24
 
 ### Added
@@ -66,7 +98,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - CI pipeline (lint + test matrix across Python 3.9–3.13).
 - Documentation auto-deploy to GitHub Pages.
 
-[Unreleased]: https://github.com/fschwar4/pycohortflow/compare/v0.1.2...HEAD
+[Unreleased]: https://github.com/fschwar4/pycohortflow/compare/v0.1.3...HEAD
+[0.1.3]: https://github.com/fschwar4/pycohortflow/compare/v0.1.2...v0.1.3
 [0.1.2]: https://github.com/fschwar4/pycohortflow/compare/v0.1.1...v0.1.2
 [0.1.1]: https://github.com/fschwar4/pycohortflow/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/fschwar4/pycohortflow/releases/tag/v0.1.0

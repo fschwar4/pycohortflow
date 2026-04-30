@@ -402,8 +402,8 @@ def load_style_config(style="white", custom_config_path=None):
         "colors": {
             "main_start": "#dff1ff",
             "main_end": "#dff7e8",
-            "exclusion_start": "#fee8e8",
-            "exclusion_end": "#f8cccc",
+            "exclusion_start": "#f8cccc",
+            "exclusion_end": "#fee8e8",
         },
     }
 

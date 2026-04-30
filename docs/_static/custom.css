@@ -24,6 +24,25 @@
     padding: 1.25rem;
 }
 
+/* Wide card spans both columns of the toctree-grid (used for the
+   Interactive Generator card on the landing page so it fills the
+   otherwise empty trailing cell). */
+.toctree-grid .card.card-wide {
+    grid-column: 1 / -1;
+}
+
+/* Centered card: centres heading and list contents. Bullet markers are
+   removed because a centred list with markers looks misaligned. */
+.toctree-grid .card.card-centered {
+    text-align: center;
+}
+
+.toctree-grid .card.card-centered ul {
+    list-style: none;
+    padding-left: 0;
+    margin-bottom: 0;
+}
+
 .toctree-grid .card h3 {
     margin-top: 0;
 }

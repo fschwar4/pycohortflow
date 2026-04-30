@@ -138,8 +138,8 @@ Below is the complete default configuration with explanations.
    allow_named_colors = true      # allow Matplotlib colour names
    main_start = "#dff1ff"         # gradient start for main boxes
    main_end = "#dff7e8"           # gradient end for main boxes
-   exclusion_start = "#fee8e8"    # gradient start for exclusion boxes
-   exclusion_end = "#f8cccc"      # gradient end for exclusion boxes
+   exclusion_start = "#f8cccc"    # gradient start for exclusion boxes
+   exclusion_end = "#fee8e8"      # gradient end for exclusion boxes
 
 In the ``white`` style, all four colour values are ``"#ffffff"``.
 
