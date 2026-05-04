@@ -260,7 +260,7 @@ test exists.
 plotting function produces valid output.
 
 - ``test_returns_figure_and_axes`` — Verifies that
-  ``plot_cohort_flow_diagram()`` returns a ``(Figure, Axes)`` tuple.
+  ``plot_cfd()`` returns a ``(Figure, Axes)`` tuple.
   This is the most fundamental contract of the function.
 - ``test_single_node`` — Ensures the function works with a minimal
   single-step cohort (no exclusions).  Edge case: the arrow and

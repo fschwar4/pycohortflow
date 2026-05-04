@@ -88,13 +88,15 @@ function drawArrow(parent, x1, y1, x2, y2, width, headSize) {
 }
 
 // --- Render ---
-export async function plotCohortFlowDiagram(data, options = {}) {
+export async function plotCfd(data, options = {}) {
   const cfg = await loadStyleConfig(options);
   return renderInternal(data, cfg, options);
 }
 
 function renderInternal(data, cfg, { figureTitle, transparent, mainPalette, exclusionPalette }) {
   const { layout, box_geometry: geom, text: txt, lines, colors } = cfg;
+  const exclusionMode = (cfg.exclusion && cfg.exclusion.mode) || "box";
+  const headingWeightDefault = txt.heading_fontweight || "bold";
   const S = SCALE;
 
   const mColors = mainPalette || gradientPalette(colors.main_start, colors.main_end, data.length);
@@ -111,17 +113,27 @@ function renderInternal(data, cfg, { figureTitle, transparent, mainPalette, excl
     const mainH = Math.max(geom.min_main_height,
       geom.padding + (tLines.length * geom.title_line_height) + geom.title_body_gap + (bLines.length * geom.body_line_height));
     const exclH = Math.max(geom.min_exclusion_height, geom.padding + (eLines.length * geom.body_line_height));
+    // Height needed to display the exclusion *text* alone (no box) at
+    // the rendered SVG font size, in layout units. Used to size the
+    // gap in text mode so we don't reserve box-sized empty space.
+    const exclTextH = (eLines.length * txt.fontsize_exclusion * 1.33 * 1.2) / S;
 
     return {
-      ...d, exclN, tLines, bLines, eLines, mainH, exclH,
+      ...d, exclN, tLines, bLines, eLines, mainH, exclH, exclTextH,
       color: resolveColor(d.color, mColors[i]),
-      exclColor: resolveColor(d.exclusion_color, eColors[i])
+      exclColor: resolveColor(d.exclusion_color, eColors[i]),
+      headingWeight: d.heading_fontweight || headingWeightDefault
     };
   });
 
-  // 2. Layout
-  const gaps = nodes.slice(1).map((n, i) =>
-    Math.max(layout.base_gap, n.exclN > 0 ? n.exclH + 2 * geom.clearance : 0));
+  // 2. Layout — gap between two boxes accommodates the exclusion. In
+  // box mode the gap is sized for the side card; in text mode there
+  // is no box, so we only need room for the rendered text.
+  const gaps = nodes.slice(1).map((n, i) => {
+    if (n.exclN <= 0) return layout.base_gap;
+    const gapH = exclusionMode === "text" ? n.exclTextH : n.exclH;
+    return Math.max(layout.base_gap, gapH + 2 * geom.clearance);
+  });
 
   const yCenters = [layout.top_margin + nodes[0].mainH / 2];
   for (let i = 1; i < nodes.length; i++) {
@@ -136,7 +148,11 @@ function renderInternal(data, cfg, { figureTitle, transparent, mainPalette, excl
   const centerX = 0;
   const exclX = centerX + layout.main_box_width/2 + layout.side_gap + layout.exclusion_box_width/2;
   const leftX = centerX - layout.main_box_width/2 - layout.x_padding;
-  const rightX = exclX + layout.exclusion_box_width/2 + layout.x_padding;
+  // In text mode the canvas is narrower — there is no exclusion box on
+  // the right, only italic side text starting at centerX + clearance.
+  const rightX = exclusionMode === "text"
+    ? centerX + geom.clearance + layout.exclusion_box_width + layout.x_padding
+    : exclX + layout.exclusion_box_width/2 + layout.x_padding;
 
   const wPx = (rightX - leftX) * S;
   const hPx = totalH * S;
@@ -149,7 +165,11 @@ function renderInternal(data, cfg, { figureTitle, transparent, mainPalette, excl
   if (!transparent) svg.appendChild(svgEl("rect", { width: wPx, height: hPx, fill: "#fff" }));
 
   if (figureTitle) {
-    const t = svgEl("text", { x: wPx/2, y: 30, "text-anchor": "middle", "font-weight": "bold", "font-size": 24, "font-family": "sans-serif" });
+    // In text mode anchor the title above the main column (centerX in
+    // data coords) instead of the canvas midpoint, which sits to the
+    // right because of the italic side text region.
+    const titleX = exclusionMode === "text" ? tx(centerX) : wPx / 2;
+    const t = svgEl("text", { x: titleX, y: 30, "text-anchor": "middle", "font-weight": "bold", "font-size": 24, "font-family": "sans-serif" });
     t.textContent = figureTitle;
     svg.appendChild(t);
   }
@@ -185,7 +205,7 @@ function renderInternal(data, cfg, { figureTitle, transparent, mainPalette, excl
     const bSz = txt.fontsize_main * 1.33;
 
     const textTop = yc - n.mainH/2 + geom.text_top_padding;
-    text(n.tLines, centerX, textTop, tSz, "bold");
+    text(n.tLines, centerX, textTop, tSz, n.headingWeight);
     text(n.bLines, centerX, textTop + (n.tLines.length * tSz * 1.2 / S) + geom.title_body_gap, bSz);
 
     // Arrows & Exclusions
@@ -196,24 +216,44 @@ function renderInternal(data, cfg, { figureTitle, transparent, mainPalette, excl
 
       if (n.exclN > 0) {
         const midY = (prevY + currY) / 2;
-        const eLeft = exclX - layout.exclusion_box_width/2;
-
-        // Excl Box
-        svg.appendChild(svgEl("rect", {
-          x: tx(eLeft), y: ty(midY - n.exclH/2),
-          width: layout.exclusion_box_width * S, height: n.exclH * S,
-          rx: geom.corner_radius * S, ry: geom.corner_radius * S,
-          fill: n.exclColor, stroke: "#000", "stroke-width": lines.box_linewidth
-        }));
-
-        // Junction & Arrow
-        svg.appendChild(svgEl("circle", { cx: tx(centerX), cy: ty(midY), r: 4, fill: "#000" }));
-        drawArrow(svg, tx(centerX), ty(midY), tx(eLeft), ty(midY), lines.connector_linewidth, lines.arrow_mutation_scale/2);
-
-        // Excl Text
         const eSz = txt.fontsize_exclusion * 1.33;
         const eTextH = n.eLines.length * eSz * 1.2 / S;
-        text(n.eLines, exclX, midY - eTextH/2, eSz, "normal", "italic");
+
+        if (exclusionMode === "text") {
+          // Plain italic side text, no box / no junction / no horizontal arrow.
+          // Anchored just to the right of the vertical arrow (ha=left, which
+          // runs along centerX).
+          const textLeftX = centerX + geom.clearance;
+          const g = svgEl("g", { "font-family": "Arial, sans-serif", "text-anchor": "start", fill: "#000" });
+          n.eLines.forEach((l, idx) => {
+            const t = svgEl("text", {
+              x: tx(textLeftX),
+              y: ty(midY - eTextH/2) + idx * eSz * 1.2,
+              "font-size": eSz, "font-weight": "normal", "font-style": "italic",
+              "dominant-baseline": "hanging"
+            });
+            t.textContent = l;
+            g.appendChild(t);
+          });
+          svg.appendChild(g);
+        } else {
+          const eLeft = exclX - layout.exclusion_box_width/2;
+
+          // Excl Box
+          svg.appendChild(svgEl("rect", {
+            x: tx(eLeft), y: ty(midY - n.exclH/2),
+            width: layout.exclusion_box_width * S, height: n.exclH * S,
+            rx: geom.corner_radius * S, ry: geom.corner_radius * S,
+            fill: n.exclColor, stroke: "#000", "stroke-width": lines.box_linewidth
+          }));
+
+          // Junction & Arrow
+          svg.appendChild(svgEl("circle", { cx: tx(centerX), cy: ty(midY), r: 4, fill: "#000" }));
+          drawArrow(svg, tx(centerX), ty(midY), tx(eLeft), ty(midY), lines.connector_linewidth, lines.arrow_mutation_scale/2);
+
+          // Excl Text
+          text(n.eLines, exclX, midY - eTextH/2, eSz, "normal", "italic");
+        }
       }
     }
   });

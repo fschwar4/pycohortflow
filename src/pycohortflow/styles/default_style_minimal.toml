@@ -34,7 +34,7 @@ pad_factor = 0.03
 fontsize_title = 12
 fontsize_main = 10
 fontsize_exclusion = 9
-heading_fontweight = "bold"
+heading_fontweight = "normal"
 
 [lines]
 box_linewidth = 1
@@ -44,10 +44,10 @@ junction_radius = 0.004
 
 [colors]
 allow_named_colors = true
-main_start = "#dff1ff"
-main_end = "#dff7e8"
-exclusion_start = "#f8cccc"
-exclusion_end = "#fee8e8"
+main_start = "#ffffff"
+main_end = "#ffffff"
+exclusion_start = "#ffffff"
+exclusion_end = "#ffffff"
 
 [exclusion]
-mode = "box"
+mode = "text"

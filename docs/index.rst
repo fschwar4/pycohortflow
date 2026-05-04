@@ -28,12 +28,23 @@ your browser** and export them as SVG, PNG or PDF.
      </div>
    </div>
 
+.. raw:: html
+
+   <p class="index-previews" align="center">
+     <a href="getting_started.html#choosing-a-built-in-style">
+       <img src="_static/clinical_flow_chart_colorful.png" alt="colorful style preview" width="35%" />
+     </a>
+     <a href="getting_started.html#choosing-a-built-in-style">
+       <img src="_static/clinical_flow_chart_minimal_white.png" alt="minimal white style preview" width="35%" />
+     </a>
+   </p>
+
 Quickstart
 ----------
 
 .. code-block:: python
 
-   from pycohortflow import plot_cohort_flow_diagram
+   from pycohortflow import plot_cfd
 
    data = [
        {"heading": "Registered", "N": 350},
@@ -43,7 +54,7 @@ Quickstart
         "exclusion_description": "Lost to follow-up"},
    ]
 
-   fig, ax = plot_cohort_flow_diagram(data, figure_title="My Study")
+   fig, ax = plot_cfd(data, figure_title="My Study")
 
 .. raw:: html
 
@@ -60,7 +71,7 @@ Quickstart
        <h3>Python API</h3>
        <ul>
          <li><a href="api.html">Python API</a> — full API documentation</li>
-         <li><a href="api_cfd.html">cfd — Plotting</a> — <code>plot_cohort_flow_diagram</code></li>
+         <li><a href="api_cfd.html">cfd — Plotting</a> — <code>plot_cfd</code></li>
          <li><a href="api_cfd_util.html">cfd_util — Utilities</a> — colours, config, helpers</li>
        </ul>
      </div>
@@ -92,3 +103,10 @@ Quickstart
    :hidden:
 
    api
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Project
+   :hidden:
+
+   roadmap

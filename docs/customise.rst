@@ -3,8 +3,8 @@ Customise
 
 Every visual aspect of the flow diagram — colours, fonts, spacing, box
 geometry — is controlled by a TOML configuration file.  The package ships
-with two built-in styles (``white`` and ``colorful``); you only need to
-override the keys you want to change.
+with three built-in styles (``white``, ``colorful``, and ``minimal``);
+you only need to override the keys you want to change.
 
 Built-in Styles
 ---------------
@@ -14,10 +14,15 @@ Select a style via the ``style`` parameter:
 .. code-block:: python
 
    # Default: clean white boxes, no background colour
-   fig, ax = plot_cohort_flow_diagram(data, style="white")
+   fig, ax = plot_cfd(data, style="white")
 
    # Pastel gradient backgrounds
-   fig, ax = plot_cohort_flow_diagram(data, style="colorful")
+   fig, ax = plot_cfd(data, style="colorful")
+
+   # Minimal: white boxes, normal-weight headings, italic side text
+   # (no exclusion box).  Pair with per-node ``"color"`` overrides to
+   # highlight start/end nodes.
+   fig, ax = plot_cfd(data, style="minimal")
 
 .. raw:: html
 
@@ -35,6 +40,12 @@ Select a style via the ``style`` parameter:
 
    ``style="colorful"``
 
+.. figure:: _static/clinical_flow_chart_minimal_colorful.png
+   :alt: Minimal style
+   :width: 100%
+
+   ``style="minimal"``
+
 .. raw:: html
 
    </div>
@@ -46,7 +57,7 @@ Create a TOML file anywhere on disk, then pass its path when plotting:
 
 .. code-block:: python
 
-   fig, ax = plot_cohort_flow_diagram(
+   fig, ax = plot_cfd(
        data,
        style="colorful",               # base style
        style_config_path="my_style.toml",  # overrides on top
@@ -107,15 +118,23 @@ Below is the complete default configuration with explanations.
    corner_radius = 0.05         # rounded corner radius
    pad_factor = 0.03            # FancyBboxPatch pad parameter
 
-``[text]`` — Font Sizes
-^^^^^^^^^^^^^^^^^^^^^^^^
+``[text]`` — Font Sizes & Weight
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: toml
 
    [text]
-   fontsize_title = 12       # box title font size
-   fontsize_main = 10        # box body font size
-   fontsize_exclusion = 9    # exclusion box font size
+   fontsize_title = 12          # box title font size
+   fontsize_main = 10           # box body font size
+   fontsize_exclusion = 9       # exclusion box font size
+   heading_fontweight = "bold"  # default weight for box headings
+                                # ("bold" or "normal"; the "minimal"
+                                # style sets this to "normal")
+
+Per-node ``heading_fontweight`` override (e.g. ``{"heading": "Final
+Cohort", "N": 60, "heading_fontweight": "bold"}``) lets you re-bold
+selected boxes when the style default is ``"normal"`` — useful for
+highlighting the first and last steps in the ``minimal`` style.
 
 ``[lines]`` — Connectors & Arrows
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -143,6 +162,18 @@ Below is the complete default configuration with explanations.
 
 In the ``white`` style, all four colour values are ``"#ffffff"``.
 
+``[exclusion]`` — Exclusion Rendering Mode
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: toml
+
+   [exclusion]
+   mode = "box"   # "box" (default) draws a side-card with a horizontal
+                  # arrow and junction dot.  "text" renders the
+                  # exclusion description as plain italic text next to
+                  # the vertical arrow — no box, no junction, no
+                  # horizontal arrow.  Used by the ``minimal`` style.
+
 Transparent Background
 -----------------------
 
@@ -151,7 +182,7 @@ For embedding diagrams in presentations or posters, use the
 
 .. code-block:: python
 
-   fig, ax = plot_cohort_flow_diagram(data, transparent=True)
+   fig, ax = plot_cfd(data, transparent=True)
 
 Minimal Override Example
 ------------------------
@@ -179,7 +210,7 @@ touching any file:
 
 .. code-block:: python
 
-   fig, ax = plot_cohort_flow_diagram(
+   fig, ax = plot_cfd(
        data,
        dpi=300,
        figsize=(14, 10),

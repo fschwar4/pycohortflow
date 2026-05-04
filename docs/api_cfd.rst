@@ -9,4 +9,4 @@ diagrams.
 Main Function
 -------------
 
-.. autofunction:: plot_cohort_flow_diagram
+.. autofunction:: plot_cfd

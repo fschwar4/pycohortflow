@@ -1,13 +1,13 @@
 """pycohortflow — lightweight cohort flow diagrams built on Matplotlib.
 
 This package provides a single high-level function,
-:func:`plot_cohort_flow_diagram`, that turns a plain Python list of cohort
+:func:`plot_cfd`, that turns a plain Python list of cohort
 steps into a publication-ready vertical flow diagram.  Appearance is fully
 customisable via TOML configuration files.
 
 Typical usage::
 
-    from pycohortflow import plot_cohort_flow_diagram
+    from pycohortflow import plot_cfd
 
     data = [
         {"heading": "Registered", "N": 350},
@@ -15,12 +15,12 @@ Typical usage::
         {"heading": "Analysed",   "N": 120, "exclusion_description": "Lost to follow-up"},
     ]
 
-    fig, ax = plot_cohort_flow_diagram(data, figure_title="My Study")
+    fig, ax = plot_cfd(data, figure_title="My Study")
 """
 
 from importlib.metadata import metadata as _metadata
 
-from pycohortflow.cfd import plot_cohort_flow_diagram
+from pycohortflow.cfd import plot_cfd
 from pycohortflow.cfd_util import (
     get_matplotlib_named_colors,
     gradient_palette,
@@ -34,7 +34,7 @@ __version__ = _meta["Version"]
 __author__ = _meta.get("Author", "")
 
 __all__ = [
-    "plot_cohort_flow_diagram",
+    "plot_cfd",
     "gradient_palette",
     "get_matplotlib_named_colors",
     "load_style_config",

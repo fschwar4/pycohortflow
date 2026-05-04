@@ -2,7 +2,7 @@
 
 This module provides colour handling, text wrapping, figure saving, and
 TOML-based style configuration loading used internally by
-:func:`pycohortflow.plot_cohort_flow_diagram`.
+:func:`pycohortflow.plot_cfd`.
 """
 
 import textwrap
@@ -32,6 +32,7 @@ __all__ = [
 _BUILTIN_STYLES = {
     "white": "default_style_white.toml",
     "colorful": "default_style_colorful.toml",
+    "minimal": "default_style_minimal.toml",
 }
 
 
@@ -40,7 +41,7 @@ _BUILTIN_STYLES = {
 # ---------------------------------------------------------------------------
 
 
-def save_figure(fig, save_dir, img_name, save_format):
+def save_figure(fig, save_dir, img_name, save_format, verbose=False):
     """Save a Matplotlib figure to disk in one or more formats.
 
     The function creates *save_dir* if it does not already exist and writes
@@ -53,12 +54,14 @@ def save_figure(fig, save_dir, img_name, save_format):
         img_name (str): Base file name **without** extension.
         save_format (str | list[str]): One format string (e.g. ``"png"``)
             or a list of format strings (e.g. ``["png", "svg", "pdf"]``).
+        verbose (bool): When ``True``, print a ``Saved: <path>`` line
+            for every file written.  Defaults to ``False`` (silent).
 
     Returns:
         None
 
     Example:
-        >>> save_figure(fig, "output", "my_chart", ["png", "svg"])
+        >>> save_figure(fig, "output", "my_chart", ["png", "svg"], verbose=True)
         Saved: output/my_chart.png
         Saved: output/my_chart.svg
 
@@ -76,7 +79,8 @@ def save_figure(fig, save_dir, img_name, save_format):
         clean_fmt = fmt.lstrip(".")
         full_path = output_dir / f"{img_name}.{clean_fmt}"
         fig.savefig(full_path, bbox_inches="tight", dpi=fig.dpi)
-        warnings.warn(f"Saved: {full_path}", stacklevel=2)
+        if verbose:
+            print(f"Saved: {full_path}")
 
 
 # ---------------------------------------------------------------------------
@@ -314,7 +318,9 @@ def load_style_config(style="white", custom_config_path=None):
     Args:
         style (str): Name of the built-in style to use as the base.
             Currently available: ``"white"`` (no background colours,
-            default) and ``"colorful"`` (pastel gradient backgrounds).
+            default), ``"colorful"`` (pastel gradient backgrounds), and
+            ``"minimal"`` (white boxes, normal-weight headings, italic
+            side text instead of exclusion boxes).
         custom_config_path (str | os.PathLike | None): Path to a custom
             TOML file.  When ``None`` (the default), only the built-in
             style is used.
@@ -381,6 +387,7 @@ def load_style_config(style="white", custom_config_path=None):
             "fontsize_title": 12,
             "fontsize_main": 10,
             "fontsize_exclusion": 9,
+            "heading_fontweight": "bold",
         },
         "lines": {
             "box_linewidth": 1,
@@ -395,6 +402,9 @@ def load_style_config(style="white", custom_config_path=None):
             "exclusion_start": "#ffffff",
             "exclusion_end": "#ffffff",
         },
+        "exclusion": {
+            "mode": "box",
+        },
     }
 
     # Colorful style overrides for the fallback path
@@ -404,6 +414,16 @@ def load_style_config(style="white", custom_config_path=None):
             "main_end": "#dff7e8",
             "exclusion_start": "#f8cccc",
             "exclusion_end": "#fee8e8",
+        },
+    }
+
+    # Minimal style overrides for the fallback path
+    _minimal_overrides = {
+        "text": {
+            "heading_fontweight": "normal",
+        },
+        "exclusion": {
+            "mode": "text",
         },
     }
 
@@ -419,6 +439,8 @@ def load_style_config(style="white", custom_config_path=None):
         config = _fallback_config
         if style == "colorful":
             config = _recursive_update(config, _colorful_overrides)
+        elif style == "minimal":
+            config = _recursive_update(config, _minimal_overrides)
 
     # 2. Merge user overrides
     if custom_config_path:

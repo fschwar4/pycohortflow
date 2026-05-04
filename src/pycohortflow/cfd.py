@@ -1,6 +1,6 @@
 """Main plotting function for cohort flow diagrams.
 
-This module contains the public :func:`plot_cohort_flow_diagram` function
+This module contains the public :func:`plot_cfd` function
 which renders a vertical flow chart from a simple Python list of cohort
 steps.
 """
@@ -16,10 +16,10 @@ from pycohortflow.cfd_util import (
     wrap_lines,
 )
 
-__all__ = ["plot_cohort_flow_diagram"]
+__all__ = ["plot_cfd"]
 
 
-def plot_cohort_flow_diagram(
+def plot_cfd(
     data,
     ax=None,
     save_dir=None,
@@ -29,6 +29,7 @@ def plot_cohort_flow_diagram(
     style="white",
     style_config_path=None,
     transparent=False,
+    verbose=False,
     **kwargs,
 ):
     """Draw a vertical cohort flow diagram.
@@ -51,6 +52,9 @@ def plot_cohort_flow_diagram(
               main box (hex string or Matplotlib colour name).
             * ``"exclusion_color"`` (``str``) – Override colour for the
               exclusion box.
+            * ``"heading_fontweight"`` (``str``) – Per-node override for
+              the box heading weight, e.g. ``"bold"`` or ``"normal"``.
+              Defaults to the style's ``[text] heading_fontweight``.
 
         ax (matplotlib.axes.Axes | None): An existing Matplotlib axes
             object to draw on.  When provided the function does **not**
@@ -71,14 +75,19 @@ def plot_cohort_flow_diagram(
             :meth:`~matplotlib.axes.Axes.set_title`.
         style (str): Name of the built-in style to use.  ``"white"``
             (default) produces boxes with no background colour;
-            ``"colorful"`` applies pastel gradients.  See
-            :doc:`customise` for details.
+            ``"colorful"`` applies pastel gradients; ``"minimal"``
+            renders white boxes with normal-weight headings and italic
+            side text instead of exclusion boxes.  See :doc:`customise`
+            for details.
         style_config_path (str | os.PathLike | None): Path to a custom
             TOML file that selectively overrides the chosen built-in
             style.  See :doc:`customise` for details.
         transparent (bool): If ``True``, the figure and axes backgrounds
             are set to transparent.  Useful for embedding the diagram in
             slides or posters.  Defaults to ``False``.
+        verbose (bool): If ``True``, print a ``Saved: <path>`` line to
+            stdout for every file written when *img_name* is provided.
+            Defaults to ``False`` (silent).
         **kwargs: Ad-hoc overrides.  Currently recognised keys:
 
             * ``dpi`` (``int``) – Figure resolution (ignored when *ax*
@@ -101,7 +110,7 @@ def plot_cohort_flow_diagram(
             the preceding node, or *style* is not recognised.
 
     Example:
-        >>> from pycohortflow import plot_cohort_flow_diagram
+        >>> from pycohortflow import plot_cfd
         >>> data = [
         ...     {"heading": "Registered", "N": 350},
         ...     {"heading": "Screened", "N": 150,
@@ -109,14 +118,14 @@ def plot_cohort_flow_diagram(
         ...     {"heading": "Analysed", "N": 120,
         ...      "exclusion_description": "Lost to follow-up"},
         ... ]
-        >>> fig, ax = plot_cohort_flow_diagram(data, figure_title="Study")
+        >>> fig, ax = plot_cfd(data, figure_title="Study")
 
         Drawing into an existing axes (e.g. a subplot):
 
         >>> import matplotlib.pyplot as plt
         >>> fig, axes = plt.subplots(1, 2, figsize=(20, 8))
-        >>> plot_cohort_flow_diagram(data, ax=axes[0], figure_title="Left")
-        >>> plot_cohort_flow_diagram(data, ax=axes[1], style="colorful")
+        >>> plot_cfd(data, ax=axes[0], figure_title="Left")
+        >>> plot_cfd(data, ax=axes[1], style="colorful")
 
     """
     if not data:
@@ -149,6 +158,7 @@ def plot_cohort_flow_diagram(
     txt = cfg["text"]
     lines = cfg["lines"]
     colors = cfg["colors"]
+    exclusion_mode = cfg.get("exclusion", {}).get("mode", "box")
 
     # Colour palettes
     main_palette = kwargs.get("main_palette") or gradient_palette(
@@ -199,6 +209,9 @@ def plot_cohort_flow_diagram(
         main_color_raw = node.get("color", main_palette[i])
         excl_color_raw = node.get("exclusion_color", excl_palette[i])
 
+        # Per-node heading weight override; falls back to the style default.
+        heading_weight = node.get("heading_fontweight", txt["heading_fontweight"])
+
         processed_nodes.append(
             {
                 "n": n_curr,
@@ -214,6 +227,7 @@ def plot_cohort_flow_diagram(
                 ),
                 "main_h": main_h,
                 "excl_h": excl_h,
+                "heading_fontweight": heading_weight,
             }
         )
 
@@ -245,7 +259,17 @@ def plot_cohort_flow_diagram(
         # Create a new figure and axes
         figsize = kwargs.get("figsize")
         if figsize is None:
-            width = (excl_x + layout["exclusion_box_width"]) * 1.5
+            if exclusion_mode == "text":
+                # No exclusion box on the right — budget only for the
+                # main column plus the italic side text region.
+                width = (
+                    layout["main_box_width"]
+                    + 2 * layout["x_padding"]
+                    + geom["clearance"]
+                    + layout["exclusion_box_width"]
+                ) * 1.5
+            else:
+                width = (excl_x + layout["exclusion_box_width"]) * 1.5
             figsize = (
                 max(cfg["figure"]["figsize_width"], width),
                 max(cfg["figure"]["figsize_height"], total_height),
@@ -297,7 +321,7 @@ def plot_cohort_flow_diagram(
             ha="center",
             va="top",
             fontsize=txt["fontsize_title"],
-            fontweight="bold",
+            fontweight=node["heading_fontweight"],
             zorder=3,
         )
 
@@ -332,68 +356,105 @@ def plot_cohort_flow_diagram(
                 zorder=1,
             )
 
-            # ── Exclusion box ──
+            # ── Exclusion: box vs. text ──
             if node["excl_n"] > 0:
                 mid_y = (prev_btm + curr_top) / 2
-                excl_left = excl_x - layout["exclusion_box_width"] / 2
 
-                ebox = patches.FancyBboxPatch(
-                    (excl_left, mid_y - node["excl_h"] / 2),
-                    layout["exclusion_box_width"],
-                    node["excl_h"],
-                    boxstyle=(
-                        f"round,pad={geom['pad_factor']},rounding_size={geom['corner_radius']}"
-                    ),
-                    edgecolor="black",
-                    facecolor=node["excl_color"],
-                    linewidth=lines["box_linewidth"],
-                    zorder=2,
-                )
-                ax.add_patch(ebox)
-
-                # Junction dot & horizontal arrow
-                ax.add_patch(
-                    patches.Circle(
-                        (center_x, mid_y),
-                        radius=lines["junction_radius"],
-                        facecolor="black",
-                        zorder=4,
+                if exclusion_mode == "text":
+                    # Plain italic side text, no box / no junction / no
+                    # horizontal arrow. Anchored just to the right of
+                    # the vertical arrow (which runs along center_x).
+                    text_x = center_x + geom["clearance"]
+                    ax.text(
+                        text_x,
+                        mid_y,
+                        "\n".join(node["excl_lines"]),
+                        ha="left",
+                        va="center",
+                        fontsize=txt["fontsize_exclusion"],
+                        fontstyle="italic",
+                        zorder=3,
                     )
-                )
-                ax.annotate(
-                    "",
-                    xy=(excl_x, mid_y),
-                    xytext=(center_x, mid_y),
-                    arrowprops=dict(
-                        arrowstyle="-|>",
-                        lw=lines["connector_linewidth"],
-                        color="black",
-                        mutation_scale=lines["arrow_mutation_scale"],
-                        patchB=ebox,
-                        shrinkA=0,
-                        shrinkB=0,
-                    ),
-                    zorder=1,
-                )
+                else:
+                    excl_left = excl_x - layout["exclusion_box_width"] / 2
 
-                ax.text(
-                    excl_x,
-                    mid_y,
-                    "\n".join(node["excl_lines"]),
-                    ha="center",
-                    va="center",
-                    fontsize=txt["fontsize_exclusion"],
-                    fontstyle="italic",
-                    zorder=3,
-                )
+                    ebox = patches.FancyBboxPatch(
+                        (excl_left, mid_y - node["excl_h"] / 2),
+                        layout["exclusion_box_width"],
+                        node["excl_h"],
+                        boxstyle=(
+                            f"round,pad={geom['pad_factor']},"
+                            f"rounding_size={geom['corner_radius']}"
+                        ),
+                        edgecolor="black",
+                        facecolor=node["excl_color"],
+                        linewidth=lines["box_linewidth"],
+                        zorder=2,
+                    )
+                    ax.add_patch(ebox)
+
+                    # Junction dot & horizontal arrow
+                    ax.add_patch(
+                        patches.Circle(
+                            (center_x, mid_y),
+                            radius=lines["junction_radius"],
+                            facecolor="black",
+                            zorder=4,
+                        )
+                    )
+                    ax.annotate(
+                        "",
+                        xy=(excl_x, mid_y),
+                        xytext=(center_x, mid_y),
+                        arrowprops=dict(
+                            arrowstyle="-|>",
+                            lw=lines["connector_linewidth"],
+                            color="black",
+                            mutation_scale=lines["arrow_mutation_scale"],
+                            patchB=ebox,
+                            shrinkA=0,
+                            shrinkB=0,
+                        ),
+                        zorder=1,
+                    )
+
+                    ax.text(
+                        excl_x,
+                        mid_y,
+                        "\n".join(node["excl_lines"]),
+                        ha="center",
+                        va="center",
+                        fontsize=txt["fontsize_exclusion"],
+                        fontstyle="italic",
+                        zorder=3,
+                    )
 
     # ── Set axis limits ──
     left_lim = center_x - layout["main_box_width"] / 2 - layout["x_padding"]
-    right_lim = excl_x + layout["exclusion_box_width"] / 2 + layout["x_padding"]
+    if exclusion_mode == "text":
+        # No exclusion box on the right — only the italic side text
+        # needs horizontal space (clearance to the right of the
+        # centerline, plus roughly one exclusion_box_width of room
+        # for wrapped text, plus padding).
+        right_lim = (
+            center_x
+            + geom["clearance"]
+            + layout["exclusion_box_width"]
+            + layout["x_padding"]
+        )
+    else:
+        right_lim = excl_x + layout["exclusion_box_width"] / 2 + layout["x_padding"]
     ax.set_xlim(left_lim, right_lim)
     ax.set_ylim(total_height, 0)
 
+    # In text mode, re-anchor the figure title above the main column so
+    # it aligns with the boxes. Matplotlib's default centers the title
+    # on the axes midpoint, which still sits to the right of center_x
+    # because of the room reserved for the italic side text.
+    if figure_title and exclusion_mode == "text":
+        ax.title.set_x((center_x - left_lim) / (right_lim - left_lim))
+
     if img_name:
-        save_figure(fig, save_dir, img_name, save_format)
+        save_figure(fig, save_dir, img_name, save_format, verbose=verbose)
 
     return fig, ax

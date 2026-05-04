@@ -1,10 +1,11 @@
 Interactive Generator
 =====================
 
-Build a cohort flow diagram directly in the browser.  Enter your cohort
-data as JSON, choose a style and optionally paste TOML overrides, then
-click **Generate**.  The resulting diagram can be downloaded as SVG, PNG
-or PDF.
+Build a cohort flow diagram directly in the browser. Enter your cohort
+data as JSON, choose a style and optionally paste TOML overrides. The
+preview updates as you type. The resulting diagram can be downloaded as
+SVG, PNG or PDF. The Generate button below the inputs forces a manual
+refresh.
 
 .. raw:: html
 
@@ -22,6 +23,7 @@ or PDF.
          <select id="cfgen-style">
            <option value="white" selected>White (default)</option>
            <option value="colorful">Colorful</option>
+           <option value="minimal">Minimal</option>
          </select>
 
          <label for="cfgen-title"><strong>Figure title</strong></label>
@@ -55,7 +57,7 @@ or PDF.
 
    <!-- ── Inline module script ──────────────────────────────────── -->
    <script type="module">
-     import { plotCohortFlowDiagram } from "./_static/js/cohortflow.js";
+     import { plotCfd } from "./_static/js/cohortflow.js";
      import { downloadSVG, downloadPNG, downloadPDF } from "./_static/js/exporter.js";
 
      const EXAMPLE = [
@@ -102,7 +104,7 @@ or PDF.
          if (typeof data[i].N !== "number") { showError("Node " + i + ' is missing a numeric "N" field.'); return; }
        }
        try {
-         const svg = await plotCohortFlowDiagram(data, {
+         const svg = await plotCfd(data, {
            style: styleEl.value,
            figureTitle: titleEl.value.trim() || null,
            transparent: transpEl.checked,
@@ -117,6 +119,26 @@ or PDF.
      }
 
      dataEl.value = JSON.stringify(EXAMPLE, null, 2);
+
+     // Auto-update: re-render whenever any input changes. Text fields
+     // are debounced so we don't re-render on every keystroke; the
+     // style select and transparent checkbox fire immediately. The
+     // Generate button remains for an explicit refresh.
+     function debounce(fn, ms) {
+       let t = null;
+       return function (...args) {
+         clearTimeout(t);
+         t = setTimeout(() => fn.apply(this, args), ms);
+       };
+     }
+     const generateDebounced = debounce(generate, 300);
+
+     dataEl.addEventListener("input", generateDebounced);
+     tomlEl.addEventListener("input", generateDebounced);
+     titleEl.addEventListener("input", generateDebounced);
+     styleEl.addEventListener("change", generate);
+     transpEl.addEventListener("change", generate);
+
      genBtn.addEventListener("click", generate);
      btnSVG.addEventListener("click", () => currentSVG && downloadSVG(currentSVG));
      btnPNG.addEventListener("click", () => currentSVG && downloadPNG(currentSVG));

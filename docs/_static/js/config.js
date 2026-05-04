@@ -3,6 +3,7 @@ import { parseTOML } from "./toml-parser.js";
 const BUILTIN_STYLES = {
   white: "styles/default_style_white.toml",
   colorful: "styles/default_style_colorful.toml",
+  minimal: "styles/default_style_minimal.toml",
 };
 
 const FALLBACK_CONFIG = Object.freeze({
@@ -23,6 +24,7 @@ const FALLBACK_CONFIG = Object.freeze({
   },
   text: {
     fontsize_title: 12, fontsize_main: 10, fontsize_exclusion: 9,
+    heading_fontweight: "bold",
   },
   lines: {
     box_linewidth: 1, connector_linewidth: 1,
@@ -32,6 +34,9 @@ const FALLBACK_CONFIG = Object.freeze({
     allow_named_colors: true,
     main_start: "#ffffff", main_end: "#ffffff",
     exclusion_start: "#ffffff", exclusion_end: "#ffffff",
+  },
+  exclusion: {
+    mode: "box",
   },
 });
 
@@ -92,6 +97,11 @@ export function loadStyleConfigSync({ style = "white", customToml = null, custom
       main_start: "#dff1ff", main_end: "#dff7e8",
       exclusion_start: "#f8cccc", exclusion_end: "#fee8e8",
     };
+  }
+
+  if (style === "minimal") {
+    config.text = { ...config.text, heading_fontweight: "normal" };
+    config.exclusion = { ...config.exclusion, mode: "text" };
   }
 
   if (customToml) {

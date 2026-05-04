@@ -21,7 +21,7 @@ Create a Python script or Jupyter notebook and paste the following:
 
 .. code-block:: python
 
-   from pycohortflow import plot_cohort_flow_diagram
+   from pycohortflow import plot_cfd
    import matplotlib.pyplot as plt
 
    cohort_data = [
@@ -49,7 +49,7 @@ Create a Python script or Jupyter notebook and paste the following:
        },
    ]
 
-   fig, ax = plot_cohort_flow_diagram(
+   fig, ax = plot_cfd(
        cohort_data,
        figure_title="Clinical Cohort Flow Diagram",
    )
@@ -68,18 +68,24 @@ connecting arrows.  The default ``"white"`` style renders clean white boxes:
 Choosing a Built-in Style
 --------------------------
 
-Two styles are bundled with the package:
+Three styles are bundled with the package:
 
 .. code-block:: python
 
    # Clean white boxes (default)
-   fig, ax = plot_cohort_flow_diagram(cohort_data, style="white")
+   fig, ax = plot_cfd(cohort_data, style="white")
 
    # Pastel gradient backgrounds
-   fig, ax = plot_cohort_flow_diagram(cohort_data, style="colorful")
+   fig, ax = plot_cfd(cohort_data, style="colorful")
+
+   # Minimal: white boxes, normal-weight headings, italic side text
+   # in place of an exclusion box.  Use per-node ``"color"`` and
+   # ``"heading_fontweight": "bold"`` overrides to highlight the
+   # first and last steps.
+   fig, ax = plot_cfd(cohort_data, style="minimal")
 
    # Transparent figure background (useful for slides or posters)
-   fig, ax = plot_cohort_flow_diagram(cohort_data, transparent=True)
+   fig, ax = plot_cfd(cohort_data, transparent=True)
 
 The ``"colorful"`` style applies pastel gradients to all boxes:
 
@@ -89,6 +95,33 @@ The ``"colorful"`` style applies pastel gradients to all boxes:
    :align: center
 
    Output using ``style="colorful"``.
+
+The ``"minimal"`` style replaces the side-card exclusion box with
+italic side text and uses normal-weight headings by default.  Per-node
+``"color"`` and ``"heading_fontweight"`` overrides let you either
+highlight just the start and end nodes (white middle nodes) or fill
+every node with a pastel gradient that mirrors the ``colorful``
+style:
+
+.. raw:: html
+
+   <div class="side-by-side">
+
+.. figure:: _static/clinical_flow_chart_minimal_colorful.png
+   :alt: Minimal style with colorful per-node gradient
+   :width: 100%
+
+   ``style="minimal"`` with a per-node pastel gradient.
+
+.. figure:: _static/clinical_flow_chart_minimal_white.png
+   :alt: Minimal style with all-white nodes
+   :width: 100%
+
+   ``style="minimal"`` with all-white nodes.
+
+.. raw:: html
+
+   </div>
 
 Drawing into an Existing Axes
 ------------------------------
@@ -100,12 +133,12 @@ draw into that axes instead of creating a new figure:
 .. code-block:: python
 
    import matplotlib.pyplot as plt
-   from pycohortflow import plot_cohort_flow_diagram
+   from pycohortflow import plot_cfd
 
    fig, axes = plt.subplots(1, 2, figsize=(20, 8))
 
-   plot_cohort_flow_diagram(cohort_data, ax=axes[0], figure_title="White")
-   plot_cohort_flow_diagram(cohort_data, ax=axes[1], style="colorful",
+   plot_cfd(cohort_data, ax=axes[0], figure_title="White")
+   plot_cfd(cohort_data, ax=axes[1], style="colorful",
                             figure_title="Colorful")
 
    plt.tight_layout()
@@ -122,7 +155,7 @@ the figure directly:
 
 .. code-block:: python
 
-   fig, ax = plot_cohort_flow_diagram(
+   fig, ax = plot_cfd(
        cohort_data,
        save_dir="output",
        img_name="my_flow_chart",

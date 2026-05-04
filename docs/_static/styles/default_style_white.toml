@@ -34,6 +34,7 @@ pad_factor = 0.03
 fontsize_title = 12
 fontsize_main = 10
 fontsize_exclusion = 9
+heading_fontweight = "bold"
 
 [lines]
 box_linewidth = 1
@@ -47,3 +48,6 @@ main_start = "#ffffff"
 main_end = "#ffffff"
 exclusion_start = "#ffffff"
 exclusion_end = "#ffffff"
+
+[exclusion]
+mode = "box"

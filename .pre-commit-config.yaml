@@ -1,0 +1,16 @@
+# Run with:
+#     pip install pre-commit && pre-commit install
+# Then the hooks below run automatically before every `git commit`.
+
+repos:
+  - repo: local
+    hooks:
+      - id: sync-roadmap
+        name: sync roadmap (docs/roadmap.rst → README.md)
+        entry: python scripts/sync_roadmap.py
+        language: system
+        files: '^(docs/roadmap\.rst|README\.md|scripts/sync_roadmap\.py)$'
+        pass_filenames: false
+        # If the script modifies README, pre-commit reports the file as
+        # changed and stops the commit. Stage the new README and try
+        # again — that's the auto-sync feedback loop.

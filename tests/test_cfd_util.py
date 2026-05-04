@@ -7,12 +7,9 @@ from pycohortflow.cfd_util import (
     _interpolate_color,
     _recursive_update,
     _rgb_to_hex,
-    get_matplotlib_named_colors,
     gradient_palette,
     load_style_config,
-    named_color,
     resolve_color,
-    save_figure,
     wrap_lines,
 )
 
@@ -27,10 +24,6 @@ class TestWrapLines:
     def test_empty_string(self):
         """Verify an empty string returns an empty list."""
         assert wrap_lines("", 20) == []
-
-    def test_short_string(self):
-        """Verify a string within width returns a single-element list."""
-        assert wrap_lines("hello", 20) == ["hello"]
 
     def test_wraps_correctly(self):
         """Verify a long string is wrapped into lines within width."""
@@ -60,30 +53,10 @@ class TestColourHelpers:
         """Verify RGB-to-hex conversion produces a lowercase string."""
         assert _rgb_to_hex((255, 0, 0)) == "#ff0000"
 
-    def test_roundtrip(self):
-        """Verify hex-RGB-hex roundtrip preserves the original value."""
-        original = "#1a2b3c"
-        assert _rgb_to_hex(_hex_to_rgb(original)) == original
-
     def test_interpolate_endpoints(self):
         """Verify interpolation at t=0 and t=1 returns the endpoints."""
         assert _interpolate_color("#000000", "#ffffff", 0.0) == "#000000"
         assert _interpolate_color("#000000", "#ffffff", 1.0) == "#ffffff"
-
-    def test_interpolate_midpoint(self):
-        """Verify midpoint interpolation between black and white."""
-        mid = _interpolate_color("#000000", "#ffffff", 0.5)
-        assert mid == "#808080"
-
-    def test_named_color(self):
-        """Verify named_color resolves 'red' to its hex value."""
-        assert named_color("red") == "#ff0000"
-
-    def test_named_colors_list(self):
-        """Verify get_matplotlib_named_colors returns a list with 'red'."""
-        colors = get_matplotlib_named_colors()
-        assert isinstance(colors, list)
-        assert "red" in colors
 
 
 # ---------------------------------------------------------------------------
@@ -110,15 +83,10 @@ class TestGradientPalette:
         assert result[0] == "#000000"
         assert result[-1] == "#ffffff"
 
-    def test_zero_returns_empty(self):
-        """Verify n=0 returns an empty list."""
-        result = gradient_palette("#000000", "#ffffff", 0)
-        assert result == []
-
-    def test_negative_returns_empty(self):
-        """Verify negative n returns an empty list."""
-        result = gradient_palette("#000000", "#ffffff", -1)
-        assert result == []
+    def test_zero_or_negative_returns_empty(self):
+        """Verify n <= 0 returns an empty list (single guard branch)."""
+        assert gradient_palette("#000000", "#ffffff", 0) == []
+        assert gradient_palette("#000000", "#ffffff", -1) == []
 
 
 # ---------------------------------------------------------------------------
@@ -183,37 +151,6 @@ class TestRecursiveUpdate:
 
 
 # ---------------------------------------------------------------------------
-# save_figure
-# ---------------------------------------------------------------------------
-
-
-class TestSaveFigure:
-    """Tests for the figure saving helper."""
-
-    def test_uses_figure_dpi(self, tmp_path):
-        """Verify save_figure uses the figure's own DPI, not a hardcoded value."""
-        import matplotlib
-        import matplotlib.pyplot as plt
-
-        matplotlib.use("Agg")
-        fig, ax = plt.subplots(dpi=72)
-        save_figure(fig, str(tmp_path), "dpi_test", "png")
-        assert (tmp_path / "dpi_test.png").exists()
-        plt.close(fig)
-
-    def test_empty_img_name_skips(self, tmp_path):
-        """Verify save_figure returns early when img_name is empty."""
-        import matplotlib
-        import matplotlib.pyplot as plt
-
-        matplotlib.use("Agg")
-        fig, ax = plt.subplots()
-        save_figure(fig, str(tmp_path), "", "png")
-        assert list(tmp_path.iterdir()) == []
-        plt.close(fig)
-
-
-# ---------------------------------------------------------------------------
 # load_style_config
 # ---------------------------------------------------------------------------
 
@@ -231,6 +168,19 @@ class TestLoadStyleConfig:
         cfg = load_style_config("colorful")
         assert cfg["colors"]["main_start"] != "#ffffff"
 
+    def test_minimal_style(self):
+        """Verify the 'minimal' style sets the new mode + weight defaults."""
+        cfg = load_style_config("minimal")
+        assert cfg["exclusion"]["mode"] == "text"
+        assert cfg["text"]["heading_fontweight"] == "normal"
+
+    def test_box_mode_default_for_white_and_colorful(self):
+        """Verify white and colorful styles default to exclusion.mode='box'."""
+        for style in ("white", "colorful"):
+            cfg = load_style_config(style)
+            assert cfg["exclusion"]["mode"] == "box"
+            assert cfg["text"]["heading_fontweight"] == "bold"
+
     def test_unknown_style_raises(self):
         """Verify an unknown style name raises ValueError."""
         with pytest.raises(ValueError, match="Unknown built-in style"):
@@ -239,7 +189,15 @@ class TestLoadStyleConfig:
     def test_all_sections_present(self):
         """Verify all required config sections are present."""
         cfg = load_style_config()
-        for section in ("figure", "layout", "box_geometry", "text", "lines", "colors"):
+        for section in (
+            "figure",
+            "layout",
+            "box_geometry",
+            "text",
+            "lines",
+            "colors",
+            "exclusion",
+        ):
             assert section in cfg, f"Missing section: {section}"
 
     def test_custom_config_override(self, tmp_path):

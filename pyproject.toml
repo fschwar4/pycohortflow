@@ -4,16 +4,36 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pycohortflow"
-version = "0.1.2"
+version = "0.1.3"
 description = "Lightweight Cohort Flow Diagrams built on Matplotlib — with an interactive browser-based generator."
 readme = "README.md"
-license = "AGPL-3.0-only"
+license = "EUPL-1.2"
 license-files = ["LICENSE*"]
 requires-python = ">=3.9"
 authors = [
     { name="FSchwarz" },
 ]
-keywords = ["cohort", "flow diagram", "matplotlib", "clinical", "consort"]
+keywords = [
+    "cohort",
+    "cohort flow diagram",
+    "flow diagram",
+    "flowchart",
+    "matplotlib",
+    "clinical research",
+    "clinical trial",
+    "randomised controlled trial",
+    "RCT",
+    "consort",
+    "prisma",
+    "prisma 2020",
+    "systematic review",
+    "meta-analysis",
+    "epidemiology",
+    "reporting standards",
+    "reproducibility",
+    "reproducible research",
+    "participant flow",
+]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Science/Research",
@@ -36,6 +56,8 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
     "pytest>=7.0",
+    "nbmake>=1.5",
+    "ipykernel>=6.0",
     "ruff>=0.4",
     "build",
     "twine",
@@ -71,4 +93,12 @@ select = ["E", "F", "W", "I", "N", "D"]
 ignore = ["D100", "D104"]
 
 [tool.pytest.ini_options]
-testpaths = ["tests"]
+# Unit tests live under tests/. The example notebook lives under
+# examples/ and is collected by `nbmake` when explicitly invoked as
+# `pytest --nbmake` (nbmake is installed via the `dev` extras and
+# silently ignores .ipynb files when its flag is absent).
+#
+# We deliberately keep `--nbmake` OUT of addopts so plain `pytest`
+# works in environments without nbmake installed; running unit tests
+# should never depend on the notebook stack.
+testpaths = ["tests", "examples"]
