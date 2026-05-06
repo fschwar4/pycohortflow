@@ -22,8 +22,8 @@ identifiers:
     value: 10.5281/zenodo.20052730
     description: Zenodo Concept DOI
   - type: doi
-    value: 10.5281/zenodo.20052731
-    description: Zenodo Software Version DOI
+    value: 10.5281/zenodo.20058123
+    description: Zenodo Software Version DOI (v0.1.4)
   - type: doi
     value: 10.31222/osf.io/ncya2
     description: OSF Preprint (Technical Paper) Concept DOI
