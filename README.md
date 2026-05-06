@@ -7,8 +7,9 @@
 [![CI](https://github.com/fschwar4/pycohortflow/actions/workflows/ci.yml/badge.svg)](https://github.com/fschwar4/pycohortflow/actions/workflows/ci.yml)
 [![Documentation](https://github.com/fschwar4/pycohortflow/actions/workflows/docs.yml/badge.svg)](https://github.com/fschwar4/pycohortflow/actions/workflows/docs.yml)
 [![PyPI version](https://img.shields.io/pypi/v/pycohortflow.svg)](https://pypi.org/project/pycohortflow/)
-[![Python versions](https://img.shields.io/pypi/pyversions/pycohortflow.svg)](https://pypi.org/project/pycohortflow/)
-[![License](https://img.shields.io/pypi/l/pycohortflow.svg)](https://pypi.org/project/pycohortflow/)
+[![License](https://img.shields.io/badge/license-EUPL--1.2-blue.svg)](LICENSE)
+[![Preprint (OSF)](https://img.shields.io/badge/preprint-OSF-orange.svg)](https://osf.io/ncya2)
+[![Zenodo concept DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20052730.svg)](https://doi.org/10.5281/zenodo.20052730)
 
 
 
@@ -116,6 +117,31 @@ fig, ax = plot_cfd(
 )
 ```
 
+## Sharing a figure with a non-Python user
+
+Use `plot_and_export` to render the figure **and** write a paste-ready
+`.cohort.json` + `.style.toml` pair that reproduces the same diagram in
+the [Interactive Generator](https://fschwar4.github.io/pycohortflow/generator.html):
+
+```python
+from pycohortflow import plot_and_export
+
+fig, ax, exp = plot_and_export(
+    data,
+    out_dir="export",
+    name="study",
+    style="colorful",
+    figure_title="My Study",
+    save_format=["png", "pdf"],
+)
+# export/study.png             (figure)
+# export/study.cohort.json     → paste into "Cohort data (JSON)"
+# export/study.style.toml      → paste into "TOML overrides"
+```
+
+Full details in
+[the docs](https://fschwar4.github.io/pycohortflow/customise.html#exporting-for-the-interactive-generator).
+
 ## Requirements
 
 - Python >= 3.9
@@ -135,8 +161,33 @@ edit that file (and run `python scripts/sync_roadmap.py`) to update it.
 <!-- ROADMAP-START -->
 - [x] Add: Small Diagram version (delivered as the `minimal` style in v0.1.3)
 - [x] Add: Verbose option for communication of saving options (delivered as `verbose=False` in v0.1.3)
+- [x] Add: Export Python data + resolved style as a paste-ready `.cohort.json` + `.style.toml` pair for the Interactive Generator (delivered as `export()` and `plot_and_export()` in v0.1.4)
+- [ ] Add: "Load Bundle" button in the Interactive Generator that reads a single combined JSON file (data + style + meta) and auto-populates all inputs, removing the two-textarea paste step
 - [ ] Add: Python-based PRISMA2020 style generation, if necessary
 - [ ] Add: Diagrams for multiple Arms (e.g. something like CONSORT style)
+- [ ] Add: Multi-source / multi-center patient recruitment — support several parallel input streams (e.g. one box per recruiting site or registry) that merge into a single downstream cohort flow, including aggregated participant counts and per-source labelling
 - [ ] Add: Full test coverage — assert per-node `color` and `exclusion_color` overrides actually change rendered `facecolor`; assert `[exclusion] mode` can be overridden via a custom TOML file; cover the `verbose=True` print path; consider an image-comparison regression test
 - [ ] Consider: switch the `verbose=True` print path to standard Python `logging` so callers can control level, destination and handlers without per-call flags
 <!-- ROADMAP-END -->
+
+
+## Citing pycohortflow
+
+If you use `pycohortflow` in your research, please cite **both** the
+descriptive paper *and* the specific software version you used. The
+Zenodo link is the **concept DOI**, which always resolves to the latest
+archived version; from there, pick the version DOI matching the release
+you actually used so readers can reproduce your analysis.
+
+- **Paper** (methodology and design):
+  Schwarz, F. (2026). *pycohortflow: Lightweight, customisable
+  cohort flow diagrams in Python and JavaScript.* MetaArXiv.
+  https://doi.org/10.31222/osf.io/ncya2
+
+- **Software version** (for reproducibility):
+  Schwarz, Friedrich. *Pycohortflow.* Zenodo, 2026.
+  https://doi.org/10.5281/zenodo.20052730
+
+A `CITATION.cff` file is included in the repository; GitHub's "Cite this
+repository" button and Zotero's importer will produce these citations
+automatically.

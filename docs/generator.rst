@@ -7,6 +7,22 @@ preview updates as you type. The resulting diagram can be downloaded as
 SVG, PNG or PDF. The Generate button below the inputs forces a manual
 refresh.
 
+.. note::
+
+   Please cite `pycohortflow` if you use a generated diagram in
+   published work. Cite both the descriptive paper and the specific
+   software version used to create the figure. For reproducibility,
+   open the Zenodo concept DOI and select the version-specific DOI
+   corresponding to the release you used.
+
+   - **Paper** (methodology and design):
+     Schwarz, F. (2026). *pycohortflow: Lightweight, customisable
+     cohort flow diagrams in Python and JavaScript.* MetaArXiv.
+     https://doi.org/10.31222/osf.io/ncya2
+   - **Software version** (for reproducibility):
+     Schwarz, Friedrich. *Pycohortflow.* Zenodo, 2026.
+     https://doi.org/10.5281/zenodo.20052730
+
 .. raw:: html
 
    <!-- ── Generator UI ──────────────────────────────────────────── -->
@@ -94,17 +110,84 @@ refresh.
        [btnSVG, btnPNG, btnPDF].forEach(b => { b.disabled = !on; b.style.opacity = on ? 1 : 0.4; });
      }
 
+     // Parse the data textarea. Accepts two shapes:
+     //
+     //   1. Bare list (legacy):              [ {...}, {...} ]
+     //   2. Envelope (pycohortflow >= 0.1.4): { "_meta": {...}, "data": [...] }
+     //
+     // Returns { data, meta } on success, null on error (and sets the
+     // error banner via showError).
+     function parseCohortInput() {
+       let parsed;
+       try { parsed = JSON.parse(dataEl.value); }
+       catch (e) { showError("Invalid JSON: " + e.message); return null; }
+
+       let data, meta = null;
+       if (Array.isArray(parsed)) {
+         data = parsed;
+       } else if (parsed && typeof parsed === "object" && Array.isArray(parsed.data)) {
+         data = parsed.data;
+         meta = parsed._meta || null;
+       } else {
+         showError("Data must be a JSON array or an envelope object with a 'data' array.");
+         return null;
+       }
+
+       if (!data.length) { showError("Data must be non-empty."); return null; }
+       // Per-node validation, mirroring the Python guards in cfd.py so
+       // both runtimes reject the same inputs with the same diagnosis.
+       for (let i = 0; i < data.length; i++) {
+         if (typeof data[i].N !== "number") {
+           showError("Node " + i + ' is missing a numeric "N" field.'); return null;
+         }
+         if (data[i].N < 0) {
+           showError("Node " + i + " has a negative N value (" + data[i].N + ").");
+           return null;
+         }
+         if (i > 0 && data[i].N > data[i - 1].N) {
+           showError(
+             "Node " + i + " has more patients (" + data[i].N +
+             ") than the previous step (" + data[i - 1].N + ")."
+           );
+           return null;
+         }
+       }
+       return { data, meta };
+     }
+
+     // Track the last-applied envelope by its _meta.exported_at value.
+     // When generate() sees a different value, it auto-populates the
+     // title and transparent inputs from the envelope's _meta block.
+     // This handles BOTH paste events and programmatic loads (e.g. a
+     // future "Load file" button assigning to dataEl.value), without
+     // overwriting manual edits during normal typing/re-renders.
+     const NEVER_SEEN = Symbol("never");
+     let lastSeenExportedAt = NEVER_SEEN;
+
      async function generate() {
        hideError();
-       let data;
-       try { data = JSON.parse(dataEl.value); }
-       catch (e) { showError("Invalid JSON: " + e.message); return; }
-       if (!Array.isArray(data) || !data.length) { showError("Data must be a non-empty JSON array."); return; }
-       for (let i = 0; i < data.length; i++) {
-         if (typeof data[i].N !== "number") { showError("Node " + i + ' is missing a numeric "N" field.'); return; }
+       const parsed = parseCohortInput();
+       if (!parsed) return;
+
+       // Auto-populate from a fresh envelope's _meta block. The
+       // freshness key is _meta.exported_at; matching previous value
+       // means the user is editing or just re-rendering, so we leave
+       // their title/transparent inputs alone.
+       if (parsed.meta) {
+         const at = parsed.meta.exported_at ?? null;
+         if (at !== lastSeenExportedAt) {
+           lastSeenExportedAt = at;
+           if ("figure_title" in parsed.meta) {
+             titleEl.value = parsed.meta.figure_title || "";
+           }
+           if (typeof parsed.meta.transparent === "boolean") {
+             transpEl.checked = parsed.meta.transparent;
+           }
+         }
        }
+
        try {
-         const svg = await plotCfd(data, {
+         const svg = await plotCfd(parsed.data, {
            style: styleEl.value,
            figureTitle: titleEl.value.trim() || null,
            transparent: transpEl.checked,

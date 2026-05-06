@@ -1,0 +1,47 @@
+{
+  "title": "pycohortflow",
+  "version": "v0.1.4",
+  "publication_date": "2026-05-06",
+  "upload_type": "software",
+  "access_right": "open",
+  "language": "eng",
+  "license": {
+    "id": "EUPL-1.2"
+  },
+  "description": "<p>Flow diagrams are widely recommended to support transparent reporting of participant or record flow. However, they are frequently omitted, incompletely reported, or generated manually in ways that separate the figure from the analysis code and increase the risk of transcription errors, arithmetic inconsistencies, and outdated counts. <code>pycohortflow</code> addresses this narrow but common problem by generating cohort flow diagrams from structured input within Python analysis workflows, making figures easier to reproduce, review, and update. A companion browser-based JavaScript generator allows collaborators to inspect, adjust, or export diagrams directly in the browser, without local software setup. This makes the same structured diagram model usable in both scripted analyses and collaborative manuscript preparation, bridging reproducibility and interdisciplinary accessibility.</p>",
+  "creators": [
+    {
+      "name": "Schwarz, Friedrich",
+      "orcid": "0009-0001-1167-8365",
+      "affiliation": "Göttingen Campus Institute for Dynamics of Biological Networks (CIDBN), University of Göttingen, Göttingen, Germany"
+    }
+  ],
+  "keywords": [
+    "python",
+    "javascript",
+    "matplotlib",
+    "cohort flow diagram",
+    "clinical research",
+    "reporting guidelines"
+  ],
+  "related_identifiers": [
+    {
+      "scheme": "doi",
+      "identifier": "10.31222/osf.io/ncya2",
+      "relation": "isDescribedBy",
+      "resource_type": "publication-preprint"
+    },
+    {
+      "scheme": "doi",
+      "identifier": "10.31222/osf.io/ncya2_v1",
+      "relation": "isDescribedBy",
+      "resource_type": "publication-preprint"
+    },
+    {
+      "scheme": "url",
+      "identifier": "https://fschwar4.github.io/pycohortflow/",
+      "relation": "isDocumentedBy",
+      "resource_type": "publication-softwaredocumentation"
+    }
+  ]
+}

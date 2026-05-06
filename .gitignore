@@ -34,3 +34,12 @@ pytest-cache*
 # Added from developer
 warnings_sphinx_build.txt
 pytest-output.txt
+
+# quarto paper extension
+paper/_extensions/
+paper/paper_files/
+paper/nature.csl
+paper/*.sty
+paper/paper.tex
+paper/paper.pdf
+paper/*.bak

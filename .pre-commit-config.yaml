@@ -3,6 +3,32 @@
 # Then the hooks below run automatically before every `git commit`.
 
 repos:
+  # Lint and format-check Python sources with the same Ruff rules CI
+  # enforces (see .github/workflows/ci.yml — the lint job).  Keeping the
+  # pinned `rev:` in lock-step with the CI-installed Ruff version avoids
+  # the "passes locally, fails in CI" drift.
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.15.12
+    hooks:
+      # `files:` scopes pre-commit to the same directories CI lints
+      # (see ci.yml).  Without it, pre-commit also scans examples/,
+      # scripts/ and docs/ — those have pre-existing lint debt and
+      # widening the scope here would block unrelated commits.
+      - id: ruff-check
+        files: ^(src|tests)/.*\.(py|ipynb)$
+      - id: ruff-format
+        args: [--check]
+        files: ^(src|tests)/.*\.(py|ipynb)$
+
+  # Strip outputs and execution counts from any committed Jupyter
+  # notebook.  Prevents personal paths and intermediate state from
+  # leaking into the repository (notebook source is preserved as-is;
+  # only the `outputs` and `execution_count` fields are cleared).
+  - repo: https://github.com/kynan/nbstripout
+    rev: 0.7.1
+    hooks:
+      - id: nbstripout
+
   - repo: local
     hooks:
       - id: sync-roadmap

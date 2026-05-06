@@ -9,6 +9,7 @@ import matplotlib.patches as patches
 import matplotlib.pyplot as plt
 
 from pycohortflow.cfd_util import (
+    apply_kwarg_overrides,
     gradient_palette,
     load_style_config,
     resolve_color,
@@ -149,9 +150,11 @@ def plot_cfd(
 
     # ── 1. Load Configuration ──────────────────────────────────────────
     cfg = load_style_config(style=style, custom_config_path=style_config_path)
-
-    if "dpi" in kwargs:
-        cfg["figure"]["dpi"] = kwargs["dpi"]
+    # ``figsize``/``dpi`` from kwargs flow into cfg here so that export.py
+    # can serialise the resolved config back to TOML.  plot_cfd itself
+    # also re-reads ``figsize`` from kwargs directly below — keep both
+    # paths in sync; do not "simplify" this call away.
+    apply_kwarg_overrides(cfg, kwargs)
 
     layout = cfg["layout"]
     geom = cfg["box_geometry"]
@@ -383,8 +386,7 @@ def plot_cfd(
                         layout["exclusion_box_width"],
                         node["excl_h"],
                         boxstyle=(
-                            f"round,pad={geom['pad_factor']},"
-                            f"rounding_size={geom['corner_radius']}"
+                            f"round,pad={geom['pad_factor']},rounding_size={geom['corner_radius']}"
                         ),
                         edgecolor="black",
                         facecolor=node["excl_color"],
@@ -437,10 +439,7 @@ def plot_cfd(
         # centerline, plus roughly one exclusion_box_width of room
         # for wrapped text, plus padding).
         right_lim = (
-            center_x
-            + geom["clearance"]
-            + layout["exclusion_box_width"]
-            + layout["x_padding"]
+            center_x + geom["clearance"] + layout["exclusion_box_width"] + layout["x_padding"]
         )
     else:
         right_lim = excl_x + layout["exclusion_box_width"] / 2 + layout["x_padding"]

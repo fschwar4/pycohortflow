@@ -5,10 +5,15 @@ TOML-based style configuration loading used internally by
 :func:`pycohortflow.plot_cfd`.
 """
 
+from __future__ import annotations
+
 import textwrap
 import warnings
 from importlib import resources
+from importlib.metadata import PackageNotFoundError
+from importlib.metadata import metadata as _metadata
 from pathlib import Path
+from typing import Any
 
 try:
     import tomllib  # Python 3.11+
@@ -25,6 +30,7 @@ __all__ = [
     "gradient_palette",
     "resolve_color",
     "load_style_config",
+    "apply_kwarg_overrides",
 ]
 
 # Mapping of built-in style short-names to TOML file names inside the
@@ -34,6 +40,51 @@ _BUILTIN_STYLES = {
     "colorful": "default_style_colorful.toml",
     "minimal": "default_style_minimal.toml",
 }
+
+
+def apply_kwarg_overrides(cfg: dict[str, Any], kwargs: dict[str, Any]) -> None:
+    """Apply ad-hoc ``plot_cfd`` kwargs that map onto TOML config keys.
+
+    This is the **single source of truth** for "which keyword arguments
+    of :func:`plot_cfd` are equivalent to a setting in the resolved
+    style config".  Both :func:`plot_cfd` and
+    :func:`pycohortflow.export.export` call this helper, so a kwarg that
+    is recognised here is guaranteed to round-trip through the export
+    pipeline back into the Interactive Generator.
+
+    Mutates *cfg* in place; returns ``None``.  Currently recognised:
+
+    * ``dpi``     → ``cfg["figure"]["dpi"]``
+    * ``figsize`` → ``cfg["figure"]["figsize_width"]`` /
+      ``cfg["figure"]["figsize_height"]`` (tuple of two floats).
+
+    Add new mappings here when extending the public ``**kwargs`` surface.
+
+    Args:
+        cfg: The style config dict (as returned by
+            :func:`load_style_config`).
+        kwargs: The ``**kwargs`` mapping passed to ``plot_cfd``.
+
+    """
+    if "dpi" in kwargs:
+        cfg["figure"]["dpi"] = kwargs["dpi"]
+    if "figsize" in kwargs:
+        w, h = kwargs["figsize"]
+        cfg["figure"]["figsize_width"] = float(w)
+        cfg["figure"]["figsize_height"] = float(h)
+
+
+def _package_version() -> str:
+    """Best-effort lookup of the installed pycohortflow version.
+
+    Returns ``"unknown"`` when the package is not installed (e.g.,
+    running tests directly from a source checkout without ``pip
+    install -e .``).
+    """
+    try:
+        return _metadata("pycohortflow")["Version"]
+    except PackageNotFoundError:
+        return "unknown"
 
 
 # ---------------------------------------------------------------------------

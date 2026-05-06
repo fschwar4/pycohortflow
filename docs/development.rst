@@ -132,6 +132,49 @@ as they would in production:
 Then open http://localhost:8000 in a browser. Use ``Ctrl+C`` to stop
 the server.
 
+Building the Preprint PDF
+-------------------------
+
+The technical description uploaded to the OSF preprint server is built
+with Quarto from the sources under ``paper/``.
+
+One-time setup
+^^^^^^^^^^^^^^
+
+1. Install Quarto ≥ 1.4 and a LaTeX toolchain (``xelatex`` on PATH, or
+   ``quarto install tinytex``).
+
+2. macOS only — install Latin Modern fonts:
+
+   .. code-block:: bash
+
+      brew install --cask font-latin-modern font-latin-modern-math
+
+3. From the ``paper/`` directory, install the arXiv format, fetch the
+   Nature CSL, and apply the local patch (fixes an upstream bug that
+   italicises only the ``K`` of "Keywords"):
+
+   .. code-block:: bash
+
+      quarto add mikemahoney218/quarto-arxiv
+      curl -L -o nature.csl https://www.zotero.org/styles/nature
+      ./patch-extension.sh
+
+Rendering
+^^^^^^^^^
+
+From the ``paper/`` directory:
+
+.. code-block:: bash
+
+   quarto render paper.md --to arxiv-pdf
+
+Produces ``paper.pdf``. The relevant YAML keys in ``paper.md`` are
+``format: arxiv-pdf``, ``bibliography: paper.bib``, and
+``csl: nature.csl``. ``_extensions/``, ``nature.csl``, and the rendered
+``paper.tex``/``paper.pdf`` are gitignored — the setup steps above
+recreate them.
+
 Publishing to PyPI
 ------------------
 

@@ -7,6 +7,68 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.4] - 2026-05-05
+
+### Added
+
+- **`pycohortflow.export()`** — serialises a `plot_cfd` invocation into
+  a paste-ready `.cohort.json` + `.style.toml` pair for the
+  [Interactive Generator](https://fschwar4.github.io/pycohortflow/generator.html).
+  Arguments mirror `plot_cfd`; the resolved style (including `dpi` /
+  `figsize` overrides) is written as TOML, the data is wrapped in a
+  JSON envelope with a `_meta` block so `figure_title` and `transparent`
+  round-trip too. `main_palette` / `exclusion_palette` kwargs bake
+  into per-node `"color"` / `"exclusion_color"` entries; existing
+  per-node overrides win, matching `plot_cfd`.
+- **`pycohortflow.plot_and_export()`** — convenience wrapper producing
+  `<name>.png`, `<name>.cohort.json` and `<name>.style.toml`
+  side-by-side under `out_dir` from one call. Returns
+  `(fig, ax, export_result)`. Conflicting kwargs
+  (`save_dir` / `img_name` / `basename`) raise `TypeError`; partial
+  `out_dir` / `name` raises `ValueError` instead of half-completing.
+- **Interactive Generator: envelope-form JSON support.** The data
+  textarea accepts both the bare list (legacy) and the new envelope
+  form. Pasting — or programmatically loading — an exported
+  `.cohort.json` auto-populates the *Figure title* and *Transparent
+  background* inputs from `_meta`; manual edits to those inputs are
+  preserved on subsequent input events.
+- **Pre-commit hooks**: `nbstripout` (notebook outputs / execution
+  counts) and `ruff-pre-commit` (pinned to CI's Ruff version, runs
+  `ruff check` + `ruff format --check`).
+- New runtime dependency: `tomli-w >= 1.0` (TOML serialisation).
+- Documentation, README, and `examples/example_cfd.ipynb` cover the
+  export workflow end-to-end; test suite extended with in-memory and
+  on-disk modes, palette baking, and full TOML round-trip.
+- **Citation infrastructure**: `CITATION.cff` (GitHub "Cite this
+  repository"), `.zenodo.json` (Zenodo release metadata), README
+  badges (OSF preprint, Zenodo concept DOI) and "Citing pycohortflow"
+  sections in `docs/index.rst` and `docs/generator.rst`, plus Quarto
+  preprint sources under `paper/` (with `paper/LICENCE.md` declaring
+  CC BY 4.0 for the paper, separate from EUPL-1.2 for the code) for
+  the OSF preprint server. Build instructions in
+  `docs/development.rst` ("Building the Preprint PDF"); preprint
+  build artefacts are gitignored.
+
+### Changed
+
+- **`pycohortflow.cfd_util.apply_kwarg_overrides` is now public** —
+  the single source of truth for "which `plot_cfd` kwargs map onto
+  TOML config keys" (currently `dpi`, `figsize`). Both `plot_cfd` and
+  `export()` route through it, so any kwarg recognised here is
+  guaranteed to round-trip through the export.
+
+### Fixed
+
+- **Interactive Generator (JS): validation parity with Python.** The
+  browser-side `parseCohortInput()` now matches `cfd.py`'s guards —
+  a negative `N`, or a step with more patients than the previous, is
+  rejected with a clear error banner instead of silently rendering
+  the implied negative exclusion swallowed.
+- **README license badge** showed stale AGPL-3 (the dynamic
+  `shields.io/pypi/l/...` badge couldn't read the SPDX-style license
+  metadata introduced in 0.1.3). Replaced with a static
+  `EUPL-1.2` badge linked to `LICENSE`.
+
 ## [0.1.3] - 2026-04-30
 
 ### Changed (breaking)
@@ -165,7 +227,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - CI pipeline (lint + test matrix across Python 3.9–3.13).
 - Documentation auto-deploy to GitHub Pages.
 
-[Unreleased]: https://github.com/fschwar4/pycohortflow/compare/v0.1.3...HEAD
+[Unreleased]: https://github.com/fschwar4/pycohortflow/compare/v0.1.4...HEAD
+[0.1.4]: https://github.com/fschwar4/pycohortflow/compare/v0.1.3...v0.1.4
 [0.1.3]: https://github.com/fschwar4/pycohortflow/compare/v0.1.2...v0.1.3
 [0.1.2]: https://github.com/fschwar4/pycohortflow/compare/v0.1.1...v0.1.2
 [0.1.1]: https://github.com/fschwar4/pycohortflow/compare/v0.1.0...v0.1.1

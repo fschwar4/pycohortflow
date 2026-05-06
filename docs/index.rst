@@ -77,6 +77,30 @@ Quickstart
      </div>
    </div>
 
+Citing pycohortflow
+-------------------
+
+If you use ``pycohortflow`` in your work, please cite **both** the
+descriptive paper *and* the specific software version you used.  The
+two serve different purposes:
+
+- **Paper** — describes the methodology, design rationale, and
+  intended use cases. Cite this so readers can find and understand
+  what ``pycohortflow`` is:
+
+  Schwarz, F. (2026). *pycohortflow: Lightweight, customisable cohort
+  flow diagrams in Python and JavaScript.* MetaArXiv.
+  https://doi.org/10.31222/osf.io/ncya2
+
+- **Software version** — pins the exact code that produced your
+  figures. Cite this so readers can reproduce your analysis. The
+  Zenodo link below is the **concept DOI**, which always resolves to
+  the latest archived version; from there, open the *Versions* panel
+  and pick the version DOI that matches the release you actually used:
+
+  Schwarz, Friedrich. *Pycohortflow.* Zenodo, 2026.
+  https://doi.org/10.5281/zenodo.20052730
+
 .. toctree::
    :maxdepth: 3
    :hidden:

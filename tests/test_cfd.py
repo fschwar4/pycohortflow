@@ -171,9 +171,7 @@ class TestHeadingFontweight:
 
         fig, ax = plot_cfd(data, style="minimal")
 
-        first_weights = [
-            t.get_fontweight() for t in ax.texts if t.get_text() == data[0]["heading"]
-        ]
+        first_weights = [t.get_fontweight() for t in ax.texts if t.get_text() == data[0]["heading"]]
         second_weights = [
             t.get_fontweight() for t in ax.texts if t.get_text() == data[1]["heading"]
         ]

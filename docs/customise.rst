@@ -226,3 +226,102 @@ style defaults**.
    :doc:`Interactive Generator <generator>`.  Paste overrides into the
    "TOML overrides" field to preview style changes without writing any
    Python code.
+
+Exporting for the Interactive Generator
+----------------------------------------
+
+When a Python pipeline produces the cohort data programmatically (for
+example as the output of an analysis step), you may want a non-Python
+collaborator to view, tweak, or re-render the same diagram in the
+:doc:`Interactive Generator <generator>` without installing Python.
+Use :func:`pycohortflow.export` (or the convenience wrapper
+:func:`pycohortflow.plot_and_export`) to produce a paste-ready
+``.cohort.json`` + ``.style.toml`` pair from your call.
+
+.. code-block:: python
+
+   from pycohortflow import plot_and_export
+
+   fig, ax, exp = plot_and_export(
+       data,
+       out_dir="export",
+       name="study",
+       style="colorful",
+       figure_title="My Study",
+       dpi=200,
+       save_format=["png", "pdf"],
+   )
+   # Writes:
+   #   export/study.png            (figure)
+   #   export/study.pdf            (figure)
+   #   export/study.cohort.json    (paste into "Cohort data (JSON)")
+   #   export/study.style.toml     (paste into "TOML overrides")
+
+In the browser:
+
+1. Open the :doc:`Interactive Generator <generator>`.
+2. Paste the contents of ``study.cohort.json`` into the
+   *Cohort data (JSON)* textarea.  The generator detects the envelope
+   format and auto-populates the *Figure title* and *Transparent
+   background* inputs from the ``_meta`` block.
+3. Paste the contents of ``study.style.toml`` into the *TOML overrides*
+   textarea.  The full resolved style is written, so the *Style*
+   dropdown selection no longer matters.
+4. The preview re-renders automatically; download as SVG / PNG / PDF.
+
+JSON envelope
+^^^^^^^^^^^^^
+
+The exported JSON wraps the data list in an envelope so per-call
+options round-trip too:
+
+.. code-block:: json
+
+   {
+     "_meta": {
+       "pycohortflow_version": "0.1.4",
+       "exported_at": "2026-05-04T10:30:00+00:00",
+       "figure_title": "My Study",
+       "transparent": false
+     },
+     "data": [
+       {"heading": "Registered", "N": 350},
+       {"heading": "Final", "N": 100}
+     ]
+   }
+
+The browser-side parser also accepts a bare list (legacy form) so older
+exports continue to work.
+
+Standalone export
+^^^^^^^^^^^^^^^^^
+
+Use :func:`pycohortflow.export` directly when the figure is already
+rendered or when you only need the JSON / TOML pair:
+
+.. code-block:: python
+
+   from pycohortflow import export
+
+   result = export(
+       data,
+       style="minimal",
+       figure_title="My Study",
+       out_dir="export",
+       basename="study",
+   )
+   # result["cohort_json"]  → the JSON string
+   # result["style_toml"]   → the TOML string
+   # result["json_path"]    → Path to the written .cohort.json
+   # result["toml_path"]    → Path to the written .style.toml
+
+Omit ``out_dir`` and ``basename`` to skip writing files; the strings
+are still returned in the result dict.
+
+.. note::
+
+   ``main_palette`` and ``exclusion_palette`` keyword overrides have no
+   TOML representation, so they are baked into the exported JSON as
+   per-node ``"color"`` / ``"exclusion_color"`` entries.  Existing
+   per-node overrides take precedence (matching the behaviour of
+   :func:`pycohortflow.plot_cfd`).
