@@ -1,17 +1,19 @@
 # Run with:
-#     pip install pre-commit && pre-commit install
+#     uv tool install pre-commit && pre-commit install
+#     (or: pipx install pre-commit && pre-commit install)
 # Then the hooks below run automatically before every `git commit`.
+# CI runs the same hooks (lint job in .github/workflows/ci.yml).
 
 repos:
-  # Lint and format-check Python sources with the same Ruff rules CI
-  # enforces (see .github/workflows/ci.yml — the lint job).  Keeping the
-  # pinned `rev:` in lock-step with the CI-installed Ruff version avoids
-  # the "passes locally, fails in CI" drift.
+  # Lint and format-check Python sources.  CI runs these same hooks, so
+  # this `rev:` is the one Ruff version for local commits and CI.  The
+  # `ruff==` pin in the `dev` extras of pyproject.toml (for running Ruff
+  # by hand) must match it: bump both together.
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.15.12
     hooks:
-      # `files:` scopes pre-commit to the same directories CI lints
-      # (see ci.yml).  Without it, pre-commit also scans examples/,
+      # `files:` limits Ruff to src/ and tests/.  Without it,
+      # pre-commit also scans examples/,
       # scripts/ and docs/ — those have pre-existing lint debt and
       # widening the scope here would block unrelated commits.
       - id: ruff-check
@@ -34,7 +36,10 @@ repos:
       - id: sync-roadmap
         name: sync roadmap (docs/roadmap.rst → README.md)
         entry: python scripts/sync_roadmap.py
-        language: system
+        # `language: python` runs the script in a hook-managed virtualenv,
+        # so it does not need a `python` executable on PATH (macOS with
+        # Homebrew only has `python3`).  The script is stdlib-only.
+        language: python
         files: '^(docs/roadmap\.rst|README\.md|scripts/sync_roadmap\.py)$'
         pass_filenames: false
         # If the script modifies README, pre-commit reports the file as

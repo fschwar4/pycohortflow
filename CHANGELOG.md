@@ -7,6 +7,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Python 3.14 to the CI test matrix and package classifiers.
+
+### Changed
+
+- CI: the test matrix no longer cancels the remaining Python versions
+  when one fails (`fail-fast: false`).
+- CI / docs workflows: GitHub Actions bumped to their Node 24 releases
+  (`actions/checkout@v7`, `actions/setup-python@v7`,
+  `actions/upload-pages-artifact@v5`, `actions/deploy-pages@v5`).
+- CI: the lint job runs the pre-commit hooks (`pre-commit run --all-files`)
+  instead of an unpinned Ruff. Ruff is pinned to 0.15.12 (`rev:` in
+  `.pre-commit-config.yaml`, `ruff==` in the `dev` extras), and CI now
+  also checks notebook outputs and the README roadmap sync.
+
+### Removed
+
+- **Python 3.9 support.** Python 3.9 reached end of life in October 2025
+  and GitHub's `ubuntu-latest` (Ubuntu 26.04) runners no longer provide
+  it. `requires-python` is now `>=3.10`; Ruff targets `py310`.
+
+### Fixed
+
+- The `sync-roadmap` pre-commit hook no longer needs a `python`
+  executable on PATH; it runs in a hook-managed virtualenv.
+
 ## [0.1.4] - 2026-05-05
 
 ### Added

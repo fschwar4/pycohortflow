@@ -144,7 +144,7 @@ Full details in
 
 ## Requirements
 
-- Python >= 3.9
+- Python >= 3.10
 - Matplotlib >= 3.5
 
 ## License

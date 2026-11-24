@@ -77,7 +77,10 @@ Linting and Formatting
 ----------------------
 
 The project uses `Ruff <https://docs.astral.sh/ruff/>`_ for both linting
-and formatting.  The configuration lives in ``pyproject.toml``:
+and formatting.  The configuration lives in ``pyproject.toml``.  The Ruff
+version is pinned in ``.pre-commit-config.yaml`` (``rev:``, used by the
+hooks and CI) and in the ``dev`` extras (for running Ruff by hand) —
+keep both in step:
 
 .. code-block:: bash
 
@@ -93,7 +96,27 @@ and formatting.  The configuration lives in ``pyproject.toml``:
    # Auto-format code
    ruff format src/ tests/
 
-CI will reject pull requests that fail either check (see below).
+Pre-commit Hooks
+^^^^^^^^^^^^^^^^
+
+``.pre-commit-config.yaml`` defines the hooks that run before every
+``git commit`` and in the CI lint job: Ruff check and format check,
+``nbstripout`` (strips notebook outputs) and the roadmap sync.  Install
+pre-commit once as a standalone tool — it manages the hook environments
+itself, no project virtual environment needed — and register the git
+hook in your clone:
+
+.. code-block:: bash
+
+   uv tool install pre-commit     # or: pipx install pre-commit
+   pre-commit install
+
+Run all hooks on demand with ``pre-commit run --all-files``.  Hooks that
+modify files (``nbstripout``, roadmap sync) stop the commit: stage the
+changed files and commit again.  ``pre-commit autoupdate`` bumps the
+pinned hook versions.
+
+CI rejects pushes and pull requests that fail any hook (see below).
 
 Continuous Integration
 ----------------------
@@ -102,9 +125,10 @@ Two GitHub Actions workflows run automatically:
 
 **CI** (``ci.yml``) — triggered on every push and pull request to ``main``:
 
-- **Lint job** — runs ``ruff check`` and ``ruff format --check`` on Python 3.12.
-- **Test job** — runs ``pytest -v`` across a matrix of Python 3.9, 3.10,
-  3.11, 3.12 and 3.13.
+- **Lint job** — runs all pre-commit hooks (``pre-commit run --all-files``)
+  on Python 3.12.
+- **Test job** — runs ``pytest -v`` across a matrix of Python 3.10, 3.11,
+  3.12, 3.13 and 3.14.
 
 **Deploy Documentation** (``docs.yml``) — triggered on push to ``main``
 (or manually via ``workflow_dispatch``):
