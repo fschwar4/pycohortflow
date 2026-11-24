@@ -182,11 +182,11 @@ you actually used so readers can reproduce your analysis.
 - **Paper** (methodology and design):
   Schwarz, F. (2026). *pycohortflow: Lightweight, customisable
   cohort flow diagrams in Python and JavaScript.* MetaArXiv.
-  https://doi.org/10.31222/osf.io/ncya2
+  [https://doi.org/10.31222/osf.io/ncya2_v1](https://doi.org/10.31222/osf.io/ncya2_v1)
 
 - **Software version** (for reproducibility):
   Schwarz, Friedrich. *Pycohortflow.* Zenodo, 2026.
-  https://doi.org/10.5281/zenodo.20052730
+  [https://doi.org/10.5281/zenodo.20052730](https://doi.org/10.5281/zenodo.20052730)
 
 A `CITATION.cff` file is included in the repository; GitHub's "Cite this
 repository" button and Zotero's importer will produce these citations
