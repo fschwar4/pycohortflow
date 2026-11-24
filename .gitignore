@@ -34,6 +34,10 @@ pytest-cache*
 # Added from developer
 warnings_sphinx_build.txt
 pytest-output.txt
+*_failed.txt
+
+# Local agent settings (path of the clone, see AGENTS.md)
+AGENTS.local.md
 
 # quarto paper extension
 paper/_extensions/
