@@ -23,10 +23,12 @@ licensed EUPL-1.2.
 ### Commands
 
 - Install with all extras: `pip install -e ".[dev,docs]"`
+- Install pre-commit (once, standalone, not in the extras): `uv tool install pre-commit && pre-commit install`
 - Unit tests (as in CI): `pytest -v`
 - Execute the example notebook: `pytest --nbmake examples/`
 - Lint and the other hooks (as in CI): `pre-commit run --all-files`
-- Ruff fixes by hand: `ruff check --fix src/ tests/`, `ruff format src/ tests/`
+- Ruff fixes and formatting: `pre-commit run --hook-stage manual ruff-fix --all-files` ("Failed" means
+  files were changed – review the diff)
 - Docs: `sphinx-build -b html docs docs/_build/html`
 - Roadmap in sync: `python3 scripts/sync_roadmap.py --check`
 
@@ -37,8 +39,9 @@ licensed EUPL-1.2.
   `docs/development.rst` in step.
 - Ruff: line length 100, rules `E F W I N D` (docstrings are linted). Lint scope is `src/` and `tests/`
   only; `examples/`, `scripts/` and `docs/` have known lint debt – do not widen the scope.
-- Ruff is pinned twice, and both pins must match: `rev:` in `.pre-commit-config.yaml` (hooks and CI)
-  and `ruff==` in the `dev` extras of `pyproject.toml`. A Ruff update changes both in one commit.
+- Ruff is pinned once: `rev:` in `.pre-commit-config.yaml` (commit hooks, CI and the manual `ruff-fix`).
+  Do not add Ruff to the `dev` extras or run an unpinned `ruff`. Dependabot (`.github/dependabot.yml`)
+  opens monthly pull requests for the hook revisions and the GitHub Actions.
 - Docs, docstrings and comments use British spelling (colour, customise).
 - The built-in styles exist twice: `src/pycohortflow/styles/*.toml` (package) and
   `docs/_static/styles/*.toml` (Interactive Generator). Both are identical – change them together.

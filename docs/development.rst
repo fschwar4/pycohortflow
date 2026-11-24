@@ -29,7 +29,9 @@ Local Development Setup
       pip install -e ".[dev,docs]"
 
    This installs the package itself (so ``import pycohortflow`` works),
-   plus Ruff, pytest, build, twine, Sphinx and the documentation theme.
+   plus pytest, build, twine, Sphinx and the documentation theme.  Ruff
+   is not part of the extras: it runs through pre-commit (see
+   `Pre-commit Hooks`_).
 
 Project Layout
 --------------
@@ -77,24 +79,23 @@ Linting and Formatting
 ----------------------
 
 The project uses `Ruff <https://docs.astral.sh/ruff/>`_ for both linting
-and formatting.  The configuration lives in ``pyproject.toml``.  The Ruff
-version is pinned in ``.pre-commit-config.yaml`` (``rev:``, used by the
-hooks and CI) and in the ``dev`` extras (for running Ruff by hand) —
-keep both in step:
+and formatting.  The configuration lives in ``pyproject.toml``.  Ruff runs
+through pre-commit (see below), and its version is pinned in one place,
+``rev:`` in ``.pre-commit-config.yaml``, so local commits, CI and the fix
+command all use the same Ruff:
 
 .. code-block:: bash
 
-   # Check for lint errors
-   ruff check src/ tests/
+   # Check lint and formatting (exactly as in CI; also runs the other hooks)
+   pre-commit run --all-files
 
-   # Check formatting
-   ruff format --check src/ tests/
+   # Auto-fix lint issues, then auto-format
+   pre-commit run --hook-stage manual ruff-fix --all-files
 
-   # Auto-fix lint issues
-   ruff check --fix src/ tests/
-
-   # Auto-format code
-   ruff format src/ tests/
+``ruff-fix`` is a pair of manual-stage hooks (``stages: [manual]``): they
+never run on ``git commit`` or in CI, only with ``--hook-stage manual``.
+pre-commit reports them as ``Failed`` when they have changed files —
+review the changes with ``git diff`` and stage them.
 
 Pre-commit Hooks
 ^^^^^^^^^^^^^^^^
@@ -113,8 +114,11 @@ hook in your clone:
 
 Run all hooks on demand with ``pre-commit run --all-files``.  Hooks that
 modify files (``nbstripout``, roadmap sync) stop the commit: stage the
-changed files and commit again.  ``pre-commit autoupdate`` bumps the
-pinned hook versions.
+changed files and commit again.
+
+Dependabot (``.github/dependabot.yml``) opens a monthly pull request that
+bumps the pinned hook versions (Ruff, nbstripout), and another one for the
+GitHub Actions.  ``pre-commit autoupdate`` bumps the hook versions by hand.
 
 CI rejects pushes and pull requests that fail any hook (see below).
 

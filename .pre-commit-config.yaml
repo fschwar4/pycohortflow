@@ -6,9 +6,9 @@
 
 repos:
   # Lint and format-check Python sources.  CI runs these same hooks, so
-  # this `rev:` is the one Ruff version for local commits and CI.  The
-  # `ruff==` pin in the `dev` extras of pyproject.toml (for running Ruff
-  # by hand) must match it: bump both together.
+  # this `rev:` is the only Ruff pin: one version for local commits, CI
+  # and the manual fixers below.  Dependabot bumps it
+  # (.github/dependabot.yml); Ruff is deliberately not in the `dev` extras.
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.15.12
     hooks:
@@ -20,6 +20,21 @@ repos:
         files: ^(src|tests)/.*\.(py|ipynb)$
       - id: ruff-format
         args: [--check]
+        files: ^(src|tests)/.*\.(py|ipynb)$
+      # Manual fixers, same Ruff version.  `stages: [manual]` keeps them
+      # out of `git commit` and CI; they run only on demand:
+      #     pre-commit run --hook-stage manual ruff-fix --all-files
+      # Both share the alias `ruff-fix` and run in this order: lint fixes
+      # first, then formatting.  pre-commit reports "Failed" when they
+      # changed files: review the diff and stage it.
+      - id: ruff-check
+        alias: ruff-fix
+        args: [--fix]
+        stages: [manual]
+        files: ^(src|tests)/.*\.(py|ipynb)$
+      - id: ruff-format
+        alias: ruff-fix
+        stages: [manual]
         files: ^(src|tests)/.*\.(py|ipynb)$
 
   # Strip outputs and execution counts from any committed Jupyter

@@ -1,0 +1,30 @@
+# Dependabot version updates: one grouped pull request per ecosystem and
+# month.  Each pull request runs CI, so a new Ruff release that flags or
+# reformats code fails the lint job there before it reaches `main`.
+version: 2
+updates:
+  # `rev:` of the hooks in .pre-commit-config.yaml (Ruff, nbstripout);
+  # the `local` sync-roadmap hook is skipped.  This `rev:` is the only
+  # Ruff pin in the repository.
+  - package-ecosystem: "pre-commit"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    groups:
+      pre-commit-hooks:
+        patterns: ["*"]
+    commit-message:
+      prefix: "chore"
+      include: "scope"
+
+  # Actions used in .github/workflows/ (checkout, setup-python, pages).
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    groups:
+      github-actions:
+        patterns: ["*"]
+    commit-message:
+      prefix: "ci"
+      include: "scope"
