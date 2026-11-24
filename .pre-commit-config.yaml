@@ -10,7 +10,7 @@ repos:
   # and the manual fixers below.  Dependabot bumps it
   # (.github/dependabot.yml); Ruff is deliberately not in the `dev` extras.
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.15.12
+    rev: v0.17.6
     hooks:
       # `files:` limits Ruff to src/ and tests/.  Without it,
       # pre-commit also scans examples/,
@@ -42,7 +42,7 @@ repos:
   # leaking into the repository (notebook source is preserved as-is;
   # only the `outputs` and `execution_count` fields are cleared).
   - repo: https://github.com/kynan/nbstripout
-    rev: 0.7.1
+    rev: 0.9.2
     hooks:
       - id: nbstripout
 
