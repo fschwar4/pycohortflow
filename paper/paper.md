@@ -1,6 +1,6 @@
 ---
 title: "pycohortflow: Lightweight, customisable cohort flow diagrams in Python and JavaScript"
-subtitle: "Version 0.1.4"
+subtitle: "Version 0.2.0"
 
 date: "today"
 date-format: "DD.MM.YYYY"
@@ -54,7 +54,7 @@ format:
         \usepackage{eso-pic}
         \usepackage{graphicx}
         \AtBeginDocument{%
-          \rhead{\scshape \runninghead\ -\ v0.1.4}
+          \rhead{\scshape \runninghead\ -\ v0.2.0}
           \AddToShipoutPictureBG*{%
             \AtPageUpperLeft{%
               \put(75,-70){\includegraphics[width=8cm]{../docs/_static/logo_wide.png}}%

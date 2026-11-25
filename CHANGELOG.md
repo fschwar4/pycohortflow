@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-11-25
+
+Requires Python 3.10 or newer (Python 3.9 support is dropped). The
+public API is unchanged; the other changes concern CI, tooling and
+documentation.
+
 ### Added
 
 - Python 3.14 to the CI test matrix and package classifiers.
@@ -271,7 +277,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - CI pipeline (lint + test matrix across Python 3.9–3.13).
 - Documentation auto-deploy to GitHub Pages.
 
-[Unreleased]: https://github.com/fschwar4/pycohortflow/compare/v0.1.4...HEAD
+[Unreleased]: https://github.com/fschwar4/pycohortflow/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/fschwar4/pycohortflow/compare/v0.1.4...v0.2.0
 [0.1.4]: https://github.com/fschwar4/pycohortflow/compare/v0.1.3...v0.1.4
 [0.1.3]: https://github.com/fschwar4/pycohortflow/compare/v0.1.2...v0.1.3
 [0.1.2]: https://github.com/fschwar4/pycohortflow/compare/v0.1.1...v0.1.2

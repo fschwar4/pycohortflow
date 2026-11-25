@@ -58,8 +58,8 @@ keywords:
   - clinical research
   - reporting guidelines
 license: EUPL-1.2
-version: v0.1.4
-date-released: '2026-05-06'
+version: v0.2.0
+date-released: '2026-11-25'
 preferred-citation:
   type: article
   title: "pycohortflow: Lightweight, customisable cohort flow diagrams in Python and JavaScript"
