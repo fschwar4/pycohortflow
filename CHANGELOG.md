@@ -25,7 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   (`actions/checkout@v7`, `actions/setup-python@v7`,
   `actions/upload-pages-artifact@v5`, `actions/deploy-pages@v5`).
 - CI: the lint job runs the pre-commit hooks (`pre-commit run --all-files`)
-  instead of an unpinned Ruff. Ruff is pinned to 0.15.12 in one place
+  instead of an unpinned Ruff. Ruff is pinned to 0.17.6 in one place
   (`rev:` in `.pre-commit-config.yaml`), and CI now also checks notebook
   outputs and the README roadmap sync.
 
