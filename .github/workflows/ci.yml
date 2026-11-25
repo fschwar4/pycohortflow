@@ -42,5 +42,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install .[dev]
 
+      # Unit tests plus the example notebook (examples/example_cfd.ipynb,
+      # all built-in styles), executed end to end by nbmake.
       - name: Run tests
-        run: pytest -v
+        run: pytest -v --nbmake

@@ -10,9 +10,12 @@ Install from PyPI with pip:
 
    pip install pycohortflow
 
-The only hard dependency is **Matplotlib** (>= 3.5).  On Python versions
-before 3.11, the lightweight ``tomli`` package is pulled in automatically so
-that TOML configuration files work out of the box.
+pip installs the runtime dependencies automatically: **Matplotlib**
+(>= 3.5) for drawing and the lightweight ``tomli-w`` (>= 1.0), which
+writes the TOML style files of ``pycohortflow.export()``.  On Python
+versions before 3.11, ``tomli`` is pulled in as well so that TOML
+configuration files can be read (3.11+ uses the standard-library
+``tomllib``).
 
 Quick Example
 -------------

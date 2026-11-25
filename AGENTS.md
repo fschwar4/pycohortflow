@@ -24,8 +24,7 @@ licensed EUPL-1.2.
 
 - Install with all extras: `pip install -e ".[dev,docs]"`
 - Install pre-commit (once, standalone, not in the extras): `uv tool install pre-commit && pre-commit install`
-- Unit tests (as in CI): `pytest -v`
-- Execute the example notebook: `pytest --nbmake examples/`
+- Tests as in CI (unit tests and the example notebook): `pytest -v --nbmake`; unit tests only: `pytest -v`
 - Lint and the other hooks (as in CI): `pre-commit run --all-files`
 - Ruff fixes and formatting: `pre-commit run --hook-stage manual ruff-fix --all-files` ("Failed" means
   files were changed – review the diff)

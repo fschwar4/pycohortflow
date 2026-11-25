@@ -146,6 +146,7 @@ Full details in
 
 - Python >= 3.10
 - Matplotlib >= 3.5
+- tomli-w >= 1.0 (plus tomli >= 2.0 on Python < 3.11; pip installs both automatically)
 
 ## License
 

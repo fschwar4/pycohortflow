@@ -28,6 +28,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   instead of an unpinned Ruff. Ruff is pinned to 0.17.6 in one place
   (`rev:` in `.pre-commit-config.yaml`), and CI now also checks notebook
   outputs and the README roadmap sync.
+- CI: the test job also executes the example notebook
+  (`pytest -v --nbmake`) on every Python version, as the preprint
+  already stated.
 
 ### Removed
 
@@ -41,6 +44,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - The `sync-roadmap` pre-commit hook no longer needs a `python`
   executable on PATH; it runs in a hook-managed virtualenv.
+- Ruff no longer warns on every run that the docstring rules D203/D211
+  and D212/D213 are incompatible: D203 and D213 are now ignored
+  explicitly, so the enforced rules are unchanged.
+- Documentation: Getting Started and the README list `tomli-w` as a
+  runtime dependency; the project layout in the development guide
+  is up to date.
 
 ## [0.1.4] - 2026-05-05
 

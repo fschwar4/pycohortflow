@@ -40,30 +40,52 @@ Project Layout
 
    pycohortflow/
    ├── src/pycohortflow/          # package source
-   │   ├── __init__.py            # public API & metadata
-   │   ├── cfd.py                 # main plotting function
+   │   ├── __init__.py            # public API, plot_and_export, __version__
+   │   ├── cfd.py                 # plot_cfd (main plotting function)
    │   ├── cfd_util.py            # colour, text & config helpers
+   │   ├── export.py              # export → .cohort.json + .style.toml
    │   └── styles/                # built-in TOML style files
    │       ├── __init__.py
    │       ├── default_style_white.toml
-   │       └── default_style_colorful.toml
+   │       ├── default_style_colorful.toml
+   │       └── default_style_minimal.toml
    ├── tests/                     # pytest test suite
    │   ├── test_cfd.py
-   │   └── test_cfd_util.py
+   │   ├── test_cfd_util.py
+   │   ├── test_export.py
+   │   └── test_roadmap_sync.py   # README roadmap matches docs/roadmap.rst
+   ├── examples/
+   │   └── example_cfd.ipynb      # example notebook (run in CI by nbmake)
    ├── docs/                      # Sphinx documentation
-   ├── .github/workflows/         # CI/CD pipelines
+   │   └── _static/
+   │       ├── js/                # Interactive Generator (plain JavaScript)
+   │       └── styles/            # copies of the built-in TOML styles
+   ├── scripts/
+   │   └── sync_roadmap.py        # docs/roadmap.rst → README.md
+   ├── paper/                     # Quarto sources of the OSF preprint
+   ├── .github/
+   │   ├── workflows/             # CI and documentation deployment
+   │   └── dependabot.yml         # monthly hook and action updates
+   ├── .pre-commit-config.yaml    # hooks for commits and the CI lint job
    ├── pyproject.toml             # project metadata & build config
    ├── CHANGELOG.md               # release history (Keep a Changelog)
+   ├── CITATION.cff               # citation metadata ("Cite this repository")
+   ├── .zenodo.json               # Zenodo release metadata
+   ├── AGENTS.md                  # instructions for coding agents
    └── MANIFEST.in                # sdist inclusion rules
 
 Running the Tests
 -----------------
 
-Run the full suite with verbose output:
+Run the unit tests and the example notebook, exactly as CI does:
 
 .. code-block:: bash
 
-   pytest -v
+   pytest -v --nbmake
+
+``--nbmake`` executes ``examples/example_cfd.ipynb`` end to end with all
+built-in styles.  Without the flag, ``pytest -v`` runs the unit tests
+only.
 
 All tests use the ``Agg`` Matplotlib backend so they work without a
 display (headless CI environments).
@@ -131,8 +153,8 @@ Two GitHub Actions workflows run automatically:
 
 - **Lint job** — runs all pre-commit hooks (``pre-commit run --all-files``)
   on Python 3.12.
-- **Test job** — runs ``pytest -v`` across a matrix of Python 3.10, 3.11,
-  3.12, 3.13 and 3.14.
+- **Test job** — runs ``pytest -v --nbmake`` (unit tests and the example
+  notebook) across a matrix of Python 3.10, 3.11, 3.12, 3.13 and 3.14.
 
 **Deploy Documentation** (``docs.yml``) — triggered on push to ``main``
 (or manually via ``workflow_dispatch``):

@@ -92,7 +92,10 @@ target-version = "py310"
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "N", "D"]
-ignore = ["D100", "D104"]
+# D203/D211 and D212/D213 are mutually exclusive pairs.  Ruff would drop
+# D203 and D213 anyway (with a warning on every run); ignoring them here
+# keeps the same rules and silences the warning.
+ignore = ["D100", "D104", "D203", "D213"]
 
 [tool.pytest.ini_options]
 # Unit tests live under tests/. The example notebook lives under
@@ -102,5 +105,6 @@ ignore = ["D100", "D104"]
 #
 # We deliberately keep `--nbmake` OUT of addopts so plain `pytest`
 # works in environments without nbmake installed; running unit tests
-# should never depend on the notebook stack.
+# should never depend on the notebook stack.  CI passes the flag
+# explicitly (`pytest -v --nbmake`).
 testpaths = ["tests", "examples"]
